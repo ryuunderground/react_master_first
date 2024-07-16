@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 //component-prop
@@ -9,7 +10,6 @@ interface ContainerProps {
 interface CircleProps {
   bgColor: string;
   borderColor?: string;
-  text?: string;
 }
 
 const Container = styled.div<ContainerProps>`
@@ -20,28 +20,18 @@ const Container = styled.div<ContainerProps>`
   border: 5px solid ${(props) => props.borderColor};
 `;
 
-const Circle = ({
-  bgColor,
-  borderColor,
-  text = "Default Text",
-}: CircleProps) => {
+const Circle = ({ bgColor, borderColor }: CircleProps) => {
+  const [counter, setCounter] = useState<number | string>(0);
+  setCounter(3);
+  setCounter("dasf");
   return (
     <>
-      <Container bgColor={bgColor} borderColor={borderColor ?? bgColor}>
-        {text}
-      </Container>
+      <Container
+        bgColor={bgColor}
+        borderColor={borderColor ?? bgColor}
+      ></Container>
     </>
   );
 };
 
 export default Circle;
-
-interface PlayerProps {
-  name: string;
-  level: number;
-}
-
-const sayHello = (playerInfo: PlayerProps) =>
-  `Hello ${playerInfo.name}. Your level is ${playerInfo.level}`;
-
-sayHello({ name: "Ryu", level: 25 });
