@@ -1,3 +1,9 @@
+# Just in case whenever restart
+
+npx create-react-app 내 앱 이름 --template typescript
+npm i --save-dev @types/styled-components
+npm i styled-components
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

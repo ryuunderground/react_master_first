@@ -1,0 +1,37 @@
+.movie {
+  width: 100%;
+  max-height: 300px;
+  border: 5px solid black;
+  display: flex;
+  flex-direction: column;
+}
+.movie__title {
+  padding-left: 5px;
+}
+.movie__contents {
+  display: flex;
+}
+.movie__info {
+  display: flex;
+  flex-direction: column;
+}
+.movie__text {
+  display: flex;
+}
+.movie__genres {
+  display: flex;
+  flex-direction: column;
+  height: 40px;
+  overflow-y: scroll;
+}
+.movie__poster {
+  width: 100px;
+  height: 200px;
+  object-fit: contain;
+  margin: 5px;
+}
+a {
+  width: 45%;
+  color: black;
+  text-decoration: none;
+}
