@@ -12,6 +12,10 @@ interface HomeInterfaceProps {
   genres: string[];
 }
 
+const Home = () => {
+  return <></>;
+};
+/**
 class Home extends React.Component {
   state = {
     isLoading: true,
@@ -35,7 +39,7 @@ class Home extends React.Component {
   render() {
     const { isLoading, movies } = this.state;
     return (
-      /**
+      
       <section className="container">
         {isLoading ? (
           <h1 className="Loading">Loading...</h1>
@@ -54,10 +58,12 @@ class Home extends React.Component {
             ))}
           </div>
         )}
-      </section> */
+      </section> 
       <></>
     );
   }
 }
+
+*/
 
 export default Home;
