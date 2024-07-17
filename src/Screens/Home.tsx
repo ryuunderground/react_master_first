@@ -1,7 +1,8 @@
 const Home = () => {
+  const users: any = [{ name: "ryu" }];
   return (
     <>
-      <h1>Home</h1>
+      <h1>{users[2].name}</h1>
     </>
   );
 };
