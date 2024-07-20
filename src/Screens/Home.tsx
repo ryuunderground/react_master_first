@@ -1,7 +1,19 @@
 import { users } from "../db";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const Home = () => {
+  const [readSearchParams, setSearchParams] = useSearchParams();
+  console.log(readSearchParams.has("geo"));
+  setTimeout(() => {
+    setSearchParams({
+      day: "today",
+      tomorrow: "123",
+      /**
+       * 3초 뒤 결과
+       * http://localhost:3000/?day=today&tomorrow=123
+       * */
+    });
+  }, 3000);
   return (
     <div>
       <ul>
