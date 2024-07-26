@@ -107,15 +107,15 @@ const Coin = () => {
                 <ContentPrice>{info.close}</ContentPrice>
               </PriceContent>
               <PriceContent>
-                <PriceTitle>open :</PriceTitle>{" "}
+                <PriceTitle>open :</PriceTitle>
                 <ContentPrice>{info.open}</ContentPrice>
               </PriceContent>
               <PriceContent>
-                <PriceTitle>high :</PriceTitle>{" "}
+                <PriceTitle>high :</PriceTitle>
                 <ContentPrice>{info.high}</ContentPrice>
               </PriceContent>
               <PriceContent>
-                <PriceTitle>low :</PriceTitle>{" "}
+                <PriceTitle>low :</PriceTitle>
                 <ContentPrice>{info.low}</ContentPrice>
               </PriceContent>
             </PriceList>

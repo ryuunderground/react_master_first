@@ -21,6 +21,18 @@ const router = createBrowserRouter([
         path: ":coinId",
         element: <Coin />,
         errorElement: <ErrorComponenet />,
+        children: [
+          {
+            path: "Price",
+            element: <Price />,
+            errorElement: <ErrorComponenet />,
+          },
+          {
+            path: "Chart",
+            element: <Chart />,
+            errorElement: <ErrorComponenet />,
+          },
+        ],
       },
     ],
     errorElement: <NotFound />,
