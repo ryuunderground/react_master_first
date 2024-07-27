@@ -1,7 +1,7 @@
-import { useParams } from "react-router-dom";
+import { useParams, Outlet, Link } from "react-router-dom";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useMatch } from "react-router-dom";
 import axios from "axios";
 
 interface IPrices {
@@ -47,12 +47,15 @@ const Main = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 24px;
+  min-height: 40vh;
 `;
 const PriceList = styled.ul`
   display: flex;
   justify-content: center;
   width: 80%;
+  height: 100%;
   gap: 48px;
 `;
 
@@ -66,6 +69,28 @@ const PriceContent = styled.li`
   border-radius: 5px;
 `;
 
+const Navs = styled.ul`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 52%;
+  a {
+    color: white;
+    width: 45%;
+  }
+`;
+const Nav = styled.li<{ isActive: boolean }>`
+  display: flex;
+  background-color: black;
+  height: 36px;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  color: ${(props) =>
+    props.isActive ? props.theme.accentColor : props.theme.textColor};
+`;
+
 const PriceTitle = styled.h2`
   font-size: 18px;
 `;
@@ -76,16 +101,19 @@ const ContentPrice = styled.span`
 const Coin = () => {
   const { coinId } = useParams();
   const [Loading, setLoading] = useState(true);
+  const [priceInfos, setPriceInfos] = useState<IPrices[]>([]);
   const [priceInfo, setPriceInfo] = useState<IPrices[]>([]);
   const location = useLocation();
   const states = location.state as RouterState;
+  const priceMatch = useMatch("/:coinId/price");
+  const chartMatch = useMatch("/:coinId/chart");
 
   const getCoinPrice = async () => {
     const priceRes = await axios(
       `https://ohlcv-api.nomadcoders.workers.dev?coinId=${coinId}`
     );
-    setPriceInfo(priceRes.data);
-    console.log(priceRes.data);
+    setPriceInfos(priceRes.data);
+    setPriceInfo(priceRes.data.slice(0, 1));
     setLoading(false);
   };
   useEffect(() => {
@@ -120,6 +148,17 @@ const Coin = () => {
               </PriceContent>
             </PriceList>
           ))}
+
+          <Navs>
+            <Link to={`/${coinId}/chart`}>
+              <Nav isActive={chartMatch !== null}>Chart</Nav>
+            </Link>
+            <Link to={`/${coinId}/price`}>
+              <Nav isActive={priceMatch !== null}>Price</Nav>
+            </Link>
+          </Navs>
+
+          <Outlet />
         </Main>
       )}
     </Container>
