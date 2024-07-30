@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useLocation, useMatch } from "react-router-dom";
 import axios from "axios";
+import { useQuery } from "react-query";
+import { priceFetcher } from "../api";
+import { Helmet } from "react-helmet";
 
 interface IPrices {
   close: string;
@@ -28,6 +31,7 @@ const Header = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 `;
 
 const Title = styled.h1`
@@ -98,15 +102,39 @@ const ContentPrice = styled.span`
   font-size: 24px;
 `;
 
+const GoBack = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 48px;
+  height: 10vh;
+  color: white;
+  position: absolute;
+  left: 20px;
+  top: 0;
+`;
+
 const Coin = () => {
   const { coinId } = useParams();
-  const [Loading, setLoading] = useState(true);
-  const [priceInfos, setPriceInfos] = useState<IPrices[]>([]);
-  const [priceInfo, setPriceInfo] = useState<IPrices[]>([]);
   const location = useLocation();
   const states = location.state as RouterState;
   const priceMatch = useMatch("/:coinId/price");
   const chartMatch = useMatch("/:coinId/chart");
+
+  const { isLoading: isPriceLoading, data: priceData } = useQuery<IPrices[]>(
+    coinId ?? "defaultCoinId",
+    () => priceFetcher(coinId),
+    {
+      enabled: !!coinId, // coinId가 있을 때만 쿼리 실행
+      refetchInterval: 5000,
+    }
+  );
+
+  if (!priceData || priceData.length === 0) return <div>No data available</div>;
+  /**
+  const [Loading, setLoading] = useState(true);
+  const [priceInfos, setPriceInfos] = useState<IPrices[]>([]);
+  const [priceInfo, setPriceInfo] = useState<IPrices[]>([]);
 
   const getCoinPrice = async () => {
     const priceRes = await axios(
@@ -119,16 +147,24 @@ const Coin = () => {
   useEffect(() => {
     getCoinPrice();
   }, []);
+  */
   return (
     <Container>
+      <Helmet>
+        <title>{states?.name || "Loading...."}</title>
+      </Helmet>
       <Header>
+        <Link to="/">
+          <GoBack>&lt;</GoBack>
+        </Link>
         <Title>{states?.name || "Loading...."}</Title>
       </Header>
-      {Loading ? (
+      {isPriceLoading ? (
         <LoadingText>Loading....</LoadingText>
       ) : (
         <Main>
-          {priceInfo.map((info) => (
+          <h2>Latest Price</h2>
+          {priceData.slice(0, 1).map((info) => (
             <PriceList>
               <PriceContent>
                 <PriceTitle>close :</PriceTitle>
@@ -158,7 +194,7 @@ const Coin = () => {
             </Link>
           </Navs>
 
-          <Outlet />
+          <Outlet context={{ coinId: coinId }} />
         </Main>
       )}
     </Container>

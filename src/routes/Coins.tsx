@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import { useQuery } from "react-query";
+import { coinFetcher } from "../api";
+import { Helmet } from "react-helmet";
 
 const Container = styled.div`
   padding: 0 20px;
@@ -55,7 +58,7 @@ const CoinPic = styled.img`
   margin-right: 10px;
 `;
 
-interface CoinsInterface {
+interface ICoins {
   id: string;
   name: string;
   symbol: string;
@@ -66,7 +69,9 @@ interface CoinsInterface {
 }
 
 const Coins = () => {
-  const [coinsData, setCoinsData] = useState<CoinsInterface[]>([]);
+  const { isLoading, data } = useQuery<ICoins[]>("allCoins", coinFetcher);
+  /**
+  const [coinsData, setCoinsData] = useState<ICoins[]>([]);
   const [Loading, setLoading] = useState(true);
 
   const getCoins = async () => {
@@ -77,17 +82,20 @@ const Coins = () => {
 
   useEffect(() => {
     getCoins();
-  }, []);
+  }, []); */
   return (
     <Container>
+      <Helmet>
+        <title>Coins</title>
+      </Helmet>
       <Header>
         <Title>Coins</Title>
       </Header>
-      {Loading ? (
+      {isLoading ? (
         <LoadingText>Loading....</LoadingText>
       ) : (
         <CoinsList>
-          {coinsData.map((coin) => (
+          {data?.map((coin) => (
             <Coin key={coin.id}>
               <Link to={`/${coin.id}`} state={{ name: coin.name }}>
                 <CoinPic
