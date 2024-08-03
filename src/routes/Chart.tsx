@@ -24,13 +24,19 @@ const Chart = () => {
   const { isLoading, data } = useQuery<IHistoryData[]>(["ohlcv", coinId], () =>
     historyFetcher(coinId)
   );
-  const PriceData = data?.map((price) => Number(price.close));
+  const PriceData = data?.map((price) => Number(price.close)) || [];
+  const NewData =
+    data?.map((price) => ({
+      x: price.time_close,
+      y: [price.open, price.high, price.low, price.close],
+    })) || [];
+  console.log(NewData);
   return (
     <div>
       {isLoading ? (
         "Is Loading"
       ) : (
-        <>
+        /**
           <ApexChart
             type="line"
             series={[
@@ -44,7 +50,7 @@ const Chart = () => {
                 mode: "dark",
               },
               chart: {
-                width: "400px",
+                width: 300,
                 height: "auto",
                 toolbar: {
                   show: false,
@@ -90,7 +96,22 @@ const Chart = () => {
               },
             }}
           />
-        </>
+          */
+        <ApexChart
+          type="candlestick"
+          series={[
+            {
+              name: "price",
+              data: NewData,
+            },
+          ]}
+          options={{
+            chart: {
+              width: 500,
+              height: "auto",
+            },
+          }}
+        />
       )}
     </div>
   );
