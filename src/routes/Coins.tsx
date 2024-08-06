@@ -1,10 +1,20 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import axios from "axios";
 import { useQuery } from "react-query";
-import { coinFetcher } from "../api";
+import { coinFetcher } from "../ts/api";
 import { Helmet } from "react-helmet";
+import { useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../ts/atoms";
+
+interface ICoins {
+  id: string;
+  name: string;
+  symbol: string;
+  rank: number;
+  is_new: boolean;
+  is_active: boolean;
+  type: string;
+}
 
 const Container = styled.div`
   padding: 0 20px;
@@ -58,31 +68,10 @@ const CoinPic = styled.img`
   margin-right: 10px;
 `;
 
-interface ICoins {
-  id: string;
-  name: string;
-  symbol: string;
-  rank: number;
-  is_new: boolean;
-  is_active: boolean;
-  type: string;
-}
-
 const Coins = () => {
   const { isLoading, data } = useQuery<ICoins[]>("allCoins", coinFetcher);
-  /**
-  const [coinsData, setCoinsData] = useState<ICoins[]>([]);
-  const [Loading, setLoading] = useState(true);
-
-  const getCoins = async () => {
-    const res = await axios("https://api.coinpaprika.com/v1/coins");
-    setCoinsData(res.data.slice(0, 100));
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    getCoins();
-  }, []); */
+  const setTheme = useSetRecoilState(isDarkAtom);
+  const toggleTheme = () => setTheme((prev) => !prev);
   return (
     <Container>
       <Helmet>
@@ -90,6 +79,7 @@ const Coins = () => {
       </Helmet>
       <Header>
         <Title>Coins</Title>
+        <button onClick={toggleTheme}>Toggle</button>
       </Header>
       {isLoading ? (
         <LoadingText>Loading....</LoadingText>

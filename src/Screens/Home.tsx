@@ -1,4 +1,4 @@
-import { users } from "../db";
+import { users } from "../ts/db";
 import { Link, useSearchParams } from "react-router-dom";
 
 const Home = () => {

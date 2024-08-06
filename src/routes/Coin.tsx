@@ -1,10 +1,10 @@
-import { useParams, Outlet, Link } from "react-router-dom";
+import { useParams, Outlet, Link, useOutletContext } from "react-router-dom";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useLocation, useMatch } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "react-query";
-import { priceFetcher } from "../api";
+import { priceFetcher } from "../ts/api";
 import { Helmet } from "react-helmet";
 
 interface IPrices {
@@ -131,23 +131,7 @@ const Coin = () => {
   );
 
   if (!priceData || priceData.length === 0) return <div>No data available</div>;
-  /**
-  const [Loading, setLoading] = useState(true);
-  const [priceInfos, setPriceInfos] = useState<IPrices[]>([]);
-  const [priceInfo, setPriceInfo] = useState<IPrices[]>([]);
 
-  const getCoinPrice = async () => {
-    const priceRes = await axios(
-      `https://ohlcv-api.nomadcoders.workers.dev?coinId=${coinId}`
-    );
-    setPriceInfos(priceRes.data);
-    setPriceInfo(priceRes.data.slice(0, 1));
-    setLoading(false);
-  };
-  useEffect(() => {
-    getCoinPrice();
-  }, []);
-  */
   return (
     <Container>
       <Helmet>

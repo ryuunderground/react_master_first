@@ -1,7 +1,9 @@
 import { useOutletContext } from "react-router-dom";
-import { historyFetcher } from "../api";
+import { historyFetcher } from "../ts/api";
 import { useQuery } from "react-query";
 import ApexChart from "react-apexcharts";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "../ts/atoms";
 
 interface ICoinData {
   coinId: string;
@@ -31,6 +33,7 @@ const Chart = () => {
       y: [price.open, price.high, price.low, price.close],
     })) || [];
   console.log(NewData);
+  const isDark = useRecoilValue(isDarkAtom);
   return (
     <div>
       {isLoading ? (
@@ -47,7 +50,7 @@ const Chart = () => {
             ]}
             options={{
               theme: {
-                mode: "dark",
+                mode: isDark ? "dark" : "light",
               },
               chart: {
                 width: 300,
@@ -109,6 +112,9 @@ const Chart = () => {
             chart: {
               width: 500,
               height: "auto",
+            },
+            theme: {
+              mode: isDark ? "dark" : "light",
             },
           }}
         />

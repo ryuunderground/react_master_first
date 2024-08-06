@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "react-query";
-import { priceFetcher } from "../api";
+import { priceFetcher } from "../ts/api";
 
 interface IPrices {
   close: string;
