@@ -1,23 +1,33 @@
 import { useState } from "react";
 
 const ToDoList = () => {
-  const [value, setValue] = useState("");
+  const [toDo, setTodo] = useState("");
+  const [toDoErr, setToDoErr] = useState("");
+
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
     const {
       currentTarget: { value },
     } = event;
-    setValue(value);
+    setToDoErr("");
+    setTodo(value);
   };
+
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(value);
+
+    if (toDo.length < 10) {
+      return setToDoErr("LONGER!!!!!!!!!");
+    }
+    console.log("submit");
   };
+
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <input onChange={onChange} value={value} placeholder="Write to do" />
+        <input onChange={onChange} value={toDo} placeholder="Write to do" />
         <button>Add</button>
       </form>
+      {toDoErr !== "" ? toDoErr : null}
     </div>
   );
 };
