@@ -1,17 +1,20 @@
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { RouterProvider } from "react-router-dom";
-import router from "./Router";
+import App from "./App";
 import { RecoilRoot } from "recoil";
+import { darkTheme } from "./theme";
+import { ThemeProvider } from "styled-components";
 
 const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
   <RecoilRoot>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <ThemeProvider theme={darkTheme}>
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
+    </ThemeProvider>
   </RecoilRoot>
 );
 
