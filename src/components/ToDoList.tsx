@@ -40,6 +40,7 @@ interface IForm {
   lastPhone: number;
   password: string;
   passwordCheck: string;
+  extraErr?: string;
 }
 
 const ToDoList = () => {
@@ -48,14 +49,22 @@ const ToDoList = () => {
     watch,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<IForm>({
     defaultValues: {
       Email: "@naver.com",
       firstPhone: "010",
     },
   });
-  const onValid = (data: any) => {
-    console.log(data);
+  const onValid = (data: IForm) => {
+    if (data.passwordCheck !== data.password) {
+      setError(
+        "passwordCheck",
+        { message: "passwords are not the same" },
+        { shouldFocus: true }
+      );
+    }
+    setError("extraErr", { message: "Server died" });
   };
   console.log(watch());
   console.log(errors);
@@ -73,7 +82,17 @@ const ToDoList = () => {
           placeholder="Write Email"
         />
         <span>{errors?.Email?.message?.toString()}</span>
-        <input {...register("firstPhone")} placeholder="Write" />
+        <input
+          {...register("firstPhone", {
+            validate: {
+              noCheat: (value) =>
+                value?.includes("070") ? "You Fish!!!" : true,
+              noA: (value) => (value?.includes("A") ? "No A" : true),
+            },
+          })}
+          placeholder="Write"
+        />
+        <span>{errors?.firstPhone?.message?.toString()}</span>
         <input
           {...register("secondPhone", {
             required: true,
@@ -113,6 +132,7 @@ const ToDoList = () => {
         />
         <span>{errors?.passwordCheck?.message?.toString()}</span>
         <button>Add</button>
+        <span>{errors?.extraErr?.message?.toString()}</span>
       </form>
     </div>
   );
