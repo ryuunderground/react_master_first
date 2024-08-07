@@ -139,7 +139,7 @@ const Coin = () => {
         <title>{states?.name || "Loading...."}</title>
       </Helmet>
       <Header>
-        <Link to="/">
+        <Link to="/react_master">
           <GoBack>&lt;</GoBack>
         </Link>
         <Title>{states?.name || "Loading...."}</Title>
