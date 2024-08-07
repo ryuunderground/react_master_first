@@ -39,6 +39,7 @@ interface IForm {
   secondPhone: number;
   lastPhone: number;
   password: string;
+  passwordCheck: string;
 }
 
 const ToDoList = () => {
@@ -101,7 +102,16 @@ const ToDoList = () => {
           })}
           placeholder="Write password"
         />
-        <span>{errors?.lastPhone?.message?.toString()}</span>
+        <span>{errors?.password?.message?.toString()}</span>
+        <input
+          {...register("passwordCheck", {
+            required: "Check the Password",
+            minLength: 8,
+            maxLength: 16,
+          })}
+          placeholder="Rewrite password"
+        />
+        <span>{errors?.passwordCheck?.message?.toString()}</span>
         <button>Add</button>
       </form>
     </div>
