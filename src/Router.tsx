@@ -13,12 +13,12 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "",
+        path: "react_master",
         element: <Coins />,
         errorElement: <ErrorComponenet />,
       },
       {
-        path: ":coinId",
+        path: "react_master/:coinId",
         element: <Coin />,
         errorElement: <ErrorComponenet />,
         children: [

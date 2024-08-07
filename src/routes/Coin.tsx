@@ -68,9 +68,10 @@ const PriceContent = styled.li`
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  background-color: #000;
+  background-color: ${(props) => props.theme.blockColor};
   padding: 18px;
   border-radius: 5px;
+  color: ${(props) => props.theme.textColor};
 `;
 
 const Navs = styled.ul`
@@ -86,7 +87,7 @@ const Navs = styled.ul`
 `;
 const Nav = styled.li<{ isActive: boolean }>`
   display: flex;
-  background-color: black;
+  background-color: ${(props) => props.theme.blockColor};
   height: 36px;
   border-radius: 5px;
   justify-content: center;
@@ -108,7 +109,7 @@ const GoBack = styled.span`
   align-items: center;
   font-size: 48px;
   height: 10vh;
-  color: white;
+  color: ${(props) => props.theme.blockColor};
   position: absolute;
   left: 20px;
   top: 0;
@@ -118,8 +119,8 @@ const Coin = () => {
   const { coinId } = useParams();
   const location = useLocation();
   const states = location.state as RouterState;
-  const priceMatch = useMatch("/:coinId/price");
-  const chartMatch = useMatch("/:coinId/chart");
+  const priceMatch = useMatch("/react_master/:coinId/price");
+  const chartMatch = useMatch("/react_master/:coinId/chart");
 
   const { isLoading: isPriceLoading, data: priceData } = useQuery<IPrices[]>(
     coinId ?? "defaultCoinId",
@@ -170,10 +171,10 @@ const Coin = () => {
           ))}
 
           <Navs>
-            <Link to={`/${coinId}/chart`}>
+            <Link to={`/react_master/${coinId}/chart`}>
               <Nav isActive={chartMatch !== null}>Chart</Nav>
             </Link>
-            <Link to={`/${coinId}/price`}>
+            <Link to={`/react_master/${coinId}/price`}>
               <Nav isActive={priceMatch !== null}>Price</Nav>
             </Link>
           </Navs>

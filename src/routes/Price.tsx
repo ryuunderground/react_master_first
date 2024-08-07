@@ -36,7 +36,7 @@ const PriceContent = styled.li`
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  background-color: #000;
+  background-color: ${(props) => props.theme.blockColor};
   padding: 18px;
   border-radius: 5px;
 `;

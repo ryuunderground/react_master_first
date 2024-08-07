@@ -42,6 +42,7 @@ const Coin = styled.li`
     transition: color 0.2s ease-in-out;
     display: flex;
     align-items: center;
+    color: ${(props) => props.theme.blockColor};
   }
   &:hover {
     a {
@@ -87,7 +88,7 @@ const Coins = () => {
         <CoinsList>
           {data?.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`} state={{ name: coin.name }}>
+              <Link to={`/react_master/${coin.id}`} state={{ name: coin.name }}>
                 <CoinPic
                   src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`}
                 />
