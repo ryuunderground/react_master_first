@@ -1,7 +1,10 @@
+import { Outlet } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { ThemeProvider } from "styled-components";
-import ToDoList from "./components/ToDoList";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { darkTheme } from "./theme";
+import { hourSelector, minuteState } from "./components/atoms";
 
 const GlobalStyles = createGlobalStyle`
 
@@ -67,11 +70,35 @@ a{
 `;
 
 const App = () => {
+  const [minutes, setMinutes] = useRecoilState(minuteState);
+  const onMinutesChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setMinutes(+event?.currentTarget.value);
+  };
+  const [hours, setHours] = useRecoilState(hourSelector);
+  const onHoursChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setHours(+event?.currentTarget.value);
+  };
   return (
     <>
-      <GlobalStyles />
-      <ToDoList />
-      <ReactQueryDevtools initialIsOpen={true} />
+      <ThemeProvider theme={darkTheme}>
+        <GlobalStyles />
+        <Outlet />
+        <div>
+          <input
+            value={minutes}
+            type="number"
+            placeholder="Minutes"
+            onChange={onMinutesChange}
+          ></input>
+          <input
+            value={hours}
+            type="number"
+            placeholder="Hours"
+            onChange={onHoursChange}
+          ></input>
+        </div>
+        <ReactQueryDevtools initialIsOpen={true} />
+      </ThemeProvider>
     </>
   );
 };
