@@ -4,7 +4,11 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { ThemeProvider } from "styled-components";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { darkTheme } from "./theme";
-import { hourSelector, minuteState } from "./components/atoms";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import styled from "styled-components";
+import { toDoState } from "./components/atoms";
+import DraggableCard from "./components/DraggableCard";
+import Board from "./components/Board";
 
 const GlobalStyles = createGlobalStyle`
 
@@ -59,7 +63,7 @@ table {
 body{
   font-family: "Source Sans 3", sans-serif;
   background-color: ${(props) => props.theme.bgColor};
-  color: ${(props) => props.theme.textColor};
+  color: black;
 }
 
 a{
@@ -69,34 +73,74 @@ a{
 
 `;
 
+const Wrapper = styled.div`
+  display: flex;
+  max-width: 680px;
+  width: 100%;
+  height: 100vh;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Boards = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+`;
+
 const App = () => {
-  const [minutes, setMinutes] = useRecoilState(minuteState);
-  const onMinutesChange = (event: React.FormEvent<HTMLInputElement>) => {
-    setMinutes(+event?.currentTarget.value);
-  };
-  const [hours, setHours] = useRecoilState(hourSelector);
-  const onHoursChange = (event: React.FormEvent<HTMLInputElement>) => {
-    setHours(+event?.currentTarget.value);
+  const [toDos, setToDos] = useRecoilState(toDoState);
+  const onDragEnd = (info: DropResult) => {
+    console.log(info);
+    const { destination, draggableId, source } = info;
+    if (!destination) return;
+    if (destination?.droppableId === source.droppableId) {
+      // 같은 보드 내 이동
+      setToDos((allBoards) => {
+        const boardCopy = [...allBoards[source.droppableId]];
+        const taskObj = boardCopy[source.index];
+        // 1. 끌고 온 아이템 삭제하기.
+        boardCopy.splice(source.index, 1);
+        // 2. 끌고 온 아이템 집어넣기.
+        boardCopy.splice(destination?.index, 0, taskObj);
+        return {
+          ...allBoards,
+          [source.droppableId]: boardCopy,
+        };
+      });
+    }
+    if (destination?.droppableId !== source.droppableId) {
+      // 다른 보드로 이동
+      setToDos((allBoards) => {
+        const sourceBoard = [...allBoards[source.droppableId]];
+        const taskObj = sourceBoard[source.index];
+        const destinationBoard = [...allBoards[destination?.droppableId]];
+        sourceBoard.splice(source.index, 1);
+        destinationBoard.splice(destination?.index, 0, taskObj);
+        return {
+          ...allBoards,
+          [source.droppableId]: sourceBoard,
+          [destination?.droppableId]: destinationBoard,
+        };
+      });
+    }
   };
   return (
     <>
       <ThemeProvider theme={darkTheme}>
         <GlobalStyles />
         <Outlet />
-        <div>
-          <input
-            value={minutes}
-            type="number"
-            placeholder="Minutes"
-            onChange={onMinutesChange}
-          ></input>
-          <input
-            value={hours}
-            type="number"
-            placeholder="Hours"
-            onChange={onHoursChange}
-          ></input>
-        </div>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Wrapper>
+            <Boards>
+              {Object.keys(toDos).map((boardId) => (
+                <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
+              ))}
+            </Boards>
+          </Wrapper>
+        </DragDropContext>
         <ReactQueryDevtools initialIsOpen={true} />
       </ThemeProvider>
     </>
