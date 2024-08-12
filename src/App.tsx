@@ -2,16 +2,9 @@ import { Outlet } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { ThemeProvider } from "styled-components";
-import { useRecoilState, useRecoilValue } from "recoil";
 import { darkTheme } from "./theme";
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import styled from "styled-components";
-import { IToDoState, toDoState } from "./components/atoms";
-import DraggableCard from "./components/DraggableCard";
-import Board from "./components/Board";
-import { Droppable } from "react-beautiful-dnd";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { motion } from "framer-motion";
 
 const GlobalStyles = createGlobalStyle`
 
@@ -65,7 +58,7 @@ table {
 }
 body{
   font-family: "Source Sans 3", sans-serif;
-  background-color: ${(props) => props.theme.bgColor};
+  background:linear-gradient(135deg,#e09,#d0e);
   color: black;
 }
 
@@ -78,173 +71,46 @@ a{
 
 const Wrapper = styled.div`
   display: flex;
-  max-width: 680px;
-  width: 100%;
   height: 100vh;
+  width: 100vw;
   margin: 0 auto;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  gap: 30px;
 `;
 
 const Boards = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   width: 100%;
+  gap: 10px;
 `;
 
-interface IBinProps {
-  isDraggingOver: boolean;
-  isdraggingfromthis: boolean;
-}
-const Bin = styled.div<IBinProps>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 600px;
-  height: 100px;
-  border: 3px solid #000;
+const Box = styled(motion.div)`
+  width: 200px;
+  height: 200px;
   background-color: white;
-  font-size: 80px;
+  border-radius: 15px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
-
-const Save = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
-  width: 26px;
-  height: 26px;
-`;
-
-interface IForm {
-  newCat: string;
-}
 
 const App = () => {
-  const [toDos, setToDos] = useRecoilState(toDoState);
-  console.log("this is toDos", toDos);
-  const saveKeys = Object.keys(toDos);
-  // 저장된 toDo 불러오기
-  useEffect(() => {
-    const savedKeys = Object.keys(sessionStorage);
-    savedKeys.forEach((savedKey) => {
-      const savedValue = sessionStorage.getItem(savedKey);
-      if (savedValue) {
-        const SavedData = JSON.parse(savedValue);
-        setToDos((allBoards) => {
-          console.log(SavedData);
-          console.log(allBoards);
-          return {
-            ...allBoards,
-            [savedKey]: SavedData,
-          };
-        });
-      }
-    });
-  }, []);
-
-  const { register, setValue, handleSubmit } = useForm<IForm>();
-  const onValid = ({ newCat }: IForm) => {
-    setToDos((allBoards) => {
-      console.log(newCat);
-      return {
-        ...allBoards,
-        [newCat]: [],
-      };
-    });
-    setValue("newCat", "");
-  };
-  const onDragEnd = (info: DropResult) => {
-    console.log(info);
-    const { destination, source } = info;
-    if (!destination) return;
-    if (destination?.droppableId === "Bin") {
-      console.log("this will be gone");
-      setToDos((allBoards) => {
-        const sourceBoard = [...allBoards[source.droppableId]];
-        sourceBoard.splice(source.index, 1);
-        console.log(allBoards);
-        return {
-          ...allBoards,
-          [source.droppableId]: sourceBoard,
-        };
-      });
-    } else if (destination?.droppableId === source.droppableId) {
-      // 같은 보드 내 이동
-      setToDos((allBoards) => {
-        const boardCopy = [...allBoards[source.droppableId]];
-        const taskObj = boardCopy[source.index];
-        // 1. 끌고 온 아이템 삭제하기.
-        boardCopy.splice(source.index, 1);
-        // 2. 끌고 온 아이템 집어넣기.
-        boardCopy.splice(destination?.index, 0, taskObj);
-        return {
-          ...allBoards,
-          [source.droppableId]: boardCopy,
-        };
-      });
-    } else if (destination?.droppableId !== source.droppableId) {
-      // 다른 보드로 이동
-      setToDos((allBoards) => {
-        const sourceBoard = [...allBoards[source.droppableId]];
-        const taskObj = sourceBoard[source.index];
-        const destinationBoard = [...allBoards[destination?.droppableId]];
-        sourceBoard.splice(source.index, 1);
-        destinationBoard.splice(destination?.index, 0, taskObj);
-        return {
-          ...allBoards,
-          [source.droppableId]: sourceBoard,
-          [destination?.droppableId]: destinationBoard,
-        };
-      });
-    }
-  };
-  const save = () => {
-    console.log("saved");
-
-    saveKeys.forEach((saveKey) => {
-      const saveValue = toDos[saveKey];
-      sessionStorage.setItem(saveKey, JSON.stringify(saveValue));
-    });
-  };
   return (
     <>
       <ThemeProvider theme={darkTheme}>
         <GlobalStyles />
         <Outlet />
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Wrapper>
-            <Save onClick={save}>💾</Save>
-            <form onSubmit={handleSubmit(onValid)}>
-              <input
-                type="text"
-                placeholder="new category?"
-                {...register("newCat", { required: true })}
-              />
-            </form>
-            <Boards>
-              {Object.keys(toDos).map((boardId) => (
-                <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
-              ))}
-            </Boards>
-            <Droppable droppableId="Bin">
-              {(provided, snapshot) => (
-                <Bin
-                  isDraggingOver={snapshot.isDraggingOver}
-                  isdraggingfromthis={Boolean(snapshot.draggingFromThisWith)}
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                >
-                  <span>🗑️</span>
-                  {provided.placeholder}
-                </Bin>
-              )}
-            </Droppable>
-          </Wrapper>
-        </DragDropContext>
+        <Wrapper>
+          <Box
+            transition={{ type: "tween", delay: 3, duration: 2, bounce: 20 }}
+            animate={{ borderRadius: "100px" }}
+          />
+          <Box
+            transition={{ type: "spring", stiffness: 10, damping: 5, mass: 4 }}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1, rotateZ: 360 }}
+          />
+        </Wrapper>
         <ReactQueryDevtools initialIsOpen={true} />
       </ThemeProvider>
     </>
