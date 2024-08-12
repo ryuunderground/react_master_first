@@ -6,11 +6,12 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { darkTheme } from "./theme";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import styled from "styled-components";
-import { toDoState } from "./components/atoms";
+import { IToDoState, toDoState } from "./components/atoms";
 import DraggableCard from "./components/DraggableCard";
 import Board from "./components/Board";
 import { Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 
 const GlobalStyles = createGlobalStyle`
 
@@ -109,6 +110,15 @@ const Bin = styled.div<IBinProps>`
   font-size: 80px;
 `;
 
+const Save = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  width: 26px;
+  height: 26px;
+`;
+
 interface IForm {
   newCat: string;
 }
@@ -116,6 +126,26 @@ interface IForm {
 const App = () => {
   const [toDos, setToDos] = useRecoilState(toDoState);
   console.log("this is toDos", toDos);
+  const saveKeys = Object.keys(toDos);
+  // 저장된 toDo 불러오기
+  useEffect(() => {
+    const savedKeys = Object.keys(sessionStorage);
+    savedKeys.forEach((savedKey) => {
+      const savedValue = sessionStorage.getItem(savedKey);
+      if (savedValue) {
+        const SavedData = JSON.parse(savedValue);
+        setToDos((allBoards) => {
+          console.log(SavedData);
+          console.log(allBoards);
+          return {
+            ...allBoards,
+            [savedKey]: SavedData,
+          };
+        });
+      }
+    });
+  }, []);
+
   const { register, setValue, handleSubmit } = useForm<IForm>();
   const onValid = ({ newCat }: IForm) => {
     setToDos((allBoards) => {
@@ -172,6 +202,14 @@ const App = () => {
       });
     }
   };
+  const save = () => {
+    console.log("saved");
+
+    saveKeys.forEach((saveKey) => {
+      const saveValue = toDos[saveKey];
+      sessionStorage.setItem(saveKey, JSON.stringify(saveValue));
+    });
+  };
   return (
     <>
       <ThemeProvider theme={darkTheme}>
@@ -179,6 +217,7 @@ const App = () => {
         <Outlet />
         <DragDropContext onDragEnd={onDragEnd}>
           <Wrapper>
+            <Save onClick={save}>💾</Save>
             <form onSubmit={handleSubmit(onValid)}>
               <input
                 type="text"
