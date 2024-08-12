@@ -5,6 +5,7 @@ import { ThemeProvider } from "styled-components";
 import { darkTheme } from "./theme";
 import styled from "styled-components";
 import { motion, spring } from "framer-motion";
+import { useRef } from "react";
 
 const GlobalStyles = createGlobalStyle`
 
@@ -78,68 +79,58 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
+const Bigger = styled.div`
+  width: 600px;
+  height: 600px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 40px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+`;
+
 const Box = styled(motion.div)`
   width: 200px;
   height: 200px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 40px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 `;
 
-const Circle = styled(motion.div)`
-  border-radius: 50%;
-  background-color: white;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
-  height: 70px;
-  width: 70px;
-  place-self: center;
-`;
-
 const boxVars = {
-  start: {
-    opacity: 0,
-    scale: 0.5,
-  },
-  end: {
-    opacity: 1,
-    scale: 1,
-
+  hover: { scale: 2, rotateZ: 90 },
+  onClick: { scale: 1, borderRadius: "100px" },
+  drag: {
+    backgroundColor: "rgba(46,204,113)",
     transition: {
-      type: "spring",
-      duration: 0.5,
-      bounce: 0.5,
-      delayChildren: 0.5,
-      staggerChildren: 0.15,
+      duration: 0.2,
     },
   },
 };
 
-const circleVars = {
-  start: {
-    opacity: 0,
-    y: 10,
-  },
-  end: {
-    opacity: 1,
-    y: 0,
-  },
-};
-
 const App = () => {
+  const biggerRef = useRef<HTMLDivElement>(null);
   return (
     <>
       <ThemeProvider theme={darkTheme}>
         <GlobalStyles />
         <Outlet />
         <Wrapper>
-          <Box variants={boxVars} initial="start" animate="end">
-            <Circle variants={circleVars}></Circle>
-            <Circle variants={circleVars}></Circle>
-            <Circle variants={circleVars}></Circle>
-            <Circle variants={circleVars}></Circle>
-          </Box>
+          <Bigger ref={biggerRef}>
+            <Box
+              drag
+              dragConstraints={biggerRef}
+              dragElastic={0}
+              variants={boxVars}
+              whileHover={boxVars.hover}
+              whileTap={boxVars.onClick}
+              whileDrag={boxVars.drag}
+            ></Box>
+          </Bigger>
         </Wrapper>
         <ReactQueryDevtools initialIsOpen={true} />
       </ThemeProvider>
