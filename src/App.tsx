@@ -4,7 +4,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { ThemeProvider } from "styled-components";
 import { darkTheme } from "./theme";
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { motion, spring } from "framer-motion";
 
 const GlobalStyles = createGlobalStyle`
 
@@ -78,26 +78,53 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const Boards = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
-  gap: 10px;
-`;
-
 const Box = styled(motion.div)`
   width: 200px;
   height: 200px;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.2);
   border-radius: 15px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 `;
 
-const myVars = {
-  start: { scale: 0 },
-  end: { scale: 1, rotateZ: 360 },
-  transition: { type: "spring", mass: 4 },
+const Circle = styled(motion.div)`
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+  height: 70px;
+  width: 70px;
+  place-self: center;
+`;
+
+const boxVars = {
+  start: {
+    opacity: 0,
+    scale: 0.5,
+  },
+  end: {
+    opacity: 1,
+    scale: 1,
+
+    transition: {
+      type: "spring",
+      duration: 0.5,
+      bounce: 0.5,
+      delayChildren: 0.5,
+      staggerChildren: 0.15,
+    },
+  },
+};
+
+const circleVars = {
+  start: {
+    opacity: 0,
+    y: 10,
+  },
+  end: {
+    opacity: 1,
+    y: 0,
+  },
 };
 
 const App = () => {
@@ -107,7 +134,12 @@ const App = () => {
         <GlobalStyles />
         <Outlet />
         <Wrapper>
-          <Box variants={myVars} initial="start" animate="end" />
+          <Box variants={boxVars} initial="start" animate="end">
+            <Circle variants={circleVars}></Circle>
+            <Circle variants={circleVars}></Circle>
+            <Circle variants={circleVars}></Circle>
+            <Circle variants={circleVars}></Circle>
+          </Box>
         </Wrapper>
         <ReactQueryDevtools initialIsOpen={true} />
       </ThemeProvider>
