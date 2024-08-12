@@ -9,6 +9,8 @@ import styled from "styled-components";
 import { toDoState } from "./components/atoms";
 import DraggableCard from "./components/DraggableCard";
 import Board from "./components/Board";
+import { Droppable } from "react-beautiful-dnd";
+import { useForm } from "react-hook-form";
 
 const GlobalStyles = createGlobalStyle`
 
@@ -81,6 +83,8 @@ const Wrapper = styled.div`
   margin: 0 auto;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  gap: 30px;
 `;
 
 const Boards = styled.div`
@@ -90,13 +94,55 @@ const Boards = styled.div`
   width: 100%;
 `;
 
+interface IBinProps {
+  isDraggingOver: boolean;
+  isdraggingfromthis: boolean;
+}
+const Bin = styled.div<IBinProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 600px;
+  height: 100px;
+  border: 3px solid #000;
+  background-color: white;
+  font-size: 80px;
+`;
+
+interface IForm {
+  newCat: string;
+}
+
 const App = () => {
   const [toDos, setToDos] = useRecoilState(toDoState);
+  console.log("this is toDos", toDos);
+  const { register, setValue, handleSubmit } = useForm<IForm>();
+  const onValid = ({ newCat }: IForm) => {
+    setToDos((allBoards) => {
+      console.log(newCat);
+      return {
+        ...allBoards,
+        [newCat]: [],
+      };
+    });
+    setValue("newCat", "");
+  };
   const onDragEnd = (info: DropResult) => {
     console.log(info);
-    const { destination, draggableId, source } = info;
+    const { destination, source } = info;
     if (!destination) return;
-    if (destination?.droppableId === source.droppableId) {
+    if (destination?.droppableId === "Bin") {
+      console.log("this will be gone");
+      setToDos((allBoards) => {
+        const sourceBoard = [...allBoards[source.droppableId]];
+        sourceBoard.splice(source.index, 1);
+        console.log(allBoards);
+        return {
+          ...allBoards,
+          [source.droppableId]: sourceBoard,
+        };
+      });
+    } else if (destination?.droppableId === source.droppableId) {
       // 같은 보드 내 이동
       setToDos((allBoards) => {
         const boardCopy = [...allBoards[source.droppableId]];
@@ -110,8 +156,7 @@ const App = () => {
           [source.droppableId]: boardCopy,
         };
       });
-    }
-    if (destination?.droppableId !== source.droppableId) {
+    } else if (destination?.droppableId !== source.droppableId) {
       // 다른 보드로 이동
       setToDos((allBoards) => {
         const sourceBoard = [...allBoards[source.droppableId]];
@@ -134,11 +179,31 @@ const App = () => {
         <Outlet />
         <DragDropContext onDragEnd={onDragEnd}>
           <Wrapper>
+            <form onSubmit={handleSubmit(onValid)}>
+              <input
+                type="text"
+                placeholder="new category?"
+                {...register("newCat", { required: true })}
+              />
+            </form>
             <Boards>
               {Object.keys(toDos).map((boardId) => (
                 <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
               ))}
             </Boards>
+            <Droppable droppableId="Bin">
+              {(provided, snapshot) => (
+                <Bin
+                  isDraggingOver={snapshot.isDraggingOver}
+                  isdraggingfromthis={Boolean(snapshot.draggingFromThisWith)}
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  <span>🗑️</span>
+                  {provided.placeholder}
+                </Bin>
+              )}
+            </Droppable>
           </Wrapper>
         </DragDropContext>
         <ReactQueryDevtools initialIsOpen={true} />

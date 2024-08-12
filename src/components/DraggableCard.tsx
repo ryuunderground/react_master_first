@@ -20,12 +20,12 @@ const Card = styled.div<{ isDragging: boolean }>`
 const DraggableCard = ({ toDoId, toDoText, index }: IDraggableCardProps) => {
   return (
     <Draggable draggableId={toDoId + ""} index={index}>
-      {(club, snapshot) => (
+      {(provided, snapshot) => (
         <Card
           isDragging={snapshot.isDragging}
-          ref={club.innerRef}
-          {...club.draggableProps}
-          {...club.dragHandleProps}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
         >
           {toDoText}
         </Card>
