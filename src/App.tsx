@@ -72,66 +72,35 @@ a{
 
 const Wrapper = styled(motion.div)`
   display: flex;
-  flex-direction: column;
   height: 100vh;
   width: 100vw;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `;
 
 const Box = styled(motion.div)`
   width: 400px;
-  height: 200px;
+  height: 400px;
   background-color: rgba(255, 255, 255, 1);
   border-radius: 40px;
   display: flex;
-  justify-content: center;
-  align-items: center;
   font-size: 28px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
-  position: absolute;
-  top: 100px;
+  justify-content: center;
+  align-items: center;
 `;
 
-const boxVars = {
-  entry: (isBack: boolean) => {
-    return {
-      x: isBack ? -500 : 500,
-      opacity: 0,
-      scale: 0,
-    };
-  },
-  center: {
-    x: 0,
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-    },
-  },
-  exit: (isBack: boolean) => {
-    return {
-      x: isBack ? 500 : -500,
-      opacity: 0,
-      scale: 0,
-      rotateX: 180,
-      transition: {
-        duration: 0.5,
-      },
-    };
-  },
-};
+const Circle = styled(motion.div)`
+  background-color: #00a5ff;
+  height: 100px;
+  width: 100px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+`;
 
 const App = () => {
-  const [visible, setVisible] = useState(4);
-  const [isBack, setIsBack] = useState(false);
-  const nextSlide = () => {
-    setIsBack(false);
-    setVisible((prev) => (prev === 10 ? 1 : prev + 1));
-  };
-  const prevSlide = () => {
-    setIsBack(true);
-    setVisible((prev) => (prev === 1 ? 10 : prev - 1));
+  const [isClicked, setIsClicked] = useState(false);
+  const toggleClicked = () => {
+    setIsClicked((prev) => !prev);
   };
 
   return (
@@ -139,21 +108,20 @@ const App = () => {
       <ThemeProvider theme={darkTheme}>
         <GlobalStyles />
         <Outlet />
-        <Wrapper>
-          <AnimatePresence mode="wait" custom={isBack}>
-            <Box
-              custom={isBack}
-              variants={boxVars}
-              initial="entry"
-              animate="center"
-              exit="exit"
-              key={visible}
-            >
-              {visible}
-            </Box>
-          </AnimatePresence>
-          <button onClick={nextSlide}>Next</button>
-          <button onClick={prevSlide}>Prev</button>
+        <Wrapper onClick={toggleClicked}>
+          <Box>
+            {!isClicked ? (
+              <Circle layoutId="circle" style={{ borderRadius: "50%" }} />
+            ) : null}
+          </Box>
+          <Box>
+            {isClicked ? (
+              <Circle
+                layoutId="circle"
+                style={{ borderRadius: "0", scale: 2 }}
+              />
+            ) : null}
+          </Box>
         </Wrapper>
         <ReactQueryDevtools initialIsOpen={true} />
       </ThemeProvider>
