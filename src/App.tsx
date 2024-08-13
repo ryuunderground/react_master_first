@@ -75,8 +75,7 @@ const Wrapper = styled(motion.div)`
   flex-direction: column;
   height: 100vh;
   width: 100vw;
-  margin: 0 auto;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
 `;
 
@@ -85,50 +84,76 @@ const Box = styled(motion.div)`
   height: 200px;
   background-color: rgba(255, 255, 255, 1);
   border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
   position: absolute;
   top: 100px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
 const boxVars = {
-  initial: {
-    opacity: 0,
-    scale: 0,
+  entry: (isBack: boolean) => {
+    return {
+      x: isBack ? -500 : 500,
+      opacity: 0,
+      scale: 0,
+    };
   },
-  visible: {
+  center: {
+    x: 0,
     opacity: 1,
     scale: 1,
-    rotateZ: 360,
+    transition: {
+      duration: 0.5,
+    },
   },
-  leaving: {
-    opacity: 0,
-    scale: 0,
-    y: -20,
+  exit: (isBack: boolean) => {
+    return {
+      x: isBack ? 500 : -500,
+      opacity: 0,
+      scale: 0,
+      rotateX: 180,
+      transition: {
+        duration: 0.5,
+      },
+    };
   },
 };
 
 const App = () => {
-  const [showing, setShowing] = useState(false);
-  const showToggle = () => {
-    setShowing((prev) => !prev);
+  const [visible, setVisible] = useState(4);
+  const [isBack, setIsBack] = useState(false);
+  const nextSlide = () => {
+    setIsBack(false);
+    setVisible((prev) => (prev === 10 ? 1 : prev + 1));
   };
+  const prevSlide = () => {
+    setIsBack(true);
+    setVisible((prev) => (prev === 1 ? 10 : prev - 1));
+  };
+
   return (
     <>
       <ThemeProvider theme={darkTheme}>
         <GlobalStyles />
         <Outlet />
         <Wrapper>
-          <button onClick={showToggle}>click me</button>
-          <AnimatePresence>
-            {showing ? (
-              <Box
-                variants={boxVars}
-                initial="initial"
-                animate="visible"
-                exit="leaving"
-              />
-            ) : null}
+          <AnimatePresence mode="wait" custom={isBack}>
+            <Box
+              custom={isBack}
+              variants={boxVars}
+              initial="entry"
+              animate="center"
+              exit="exit"
+              key={visible}
+            >
+              {visible}
+            </Box>
           </AnimatePresence>
+          <button onClick={nextSlide}>Next</button>
+          <button onClick={prevSlide}>Prev</button>
         </Wrapper>
         <ReactQueryDevtools initialIsOpen={true} />
       </ThemeProvider>
