@@ -111,32 +111,32 @@ const Overlay = styled(motion.div)`
 `;
 
 const App = () => {
-  const [isClicked, setIsClicked] = useState(false);
-  const toggleClicked = () => {
-    setIsClicked((prev) => !prev);
-  };
-
+  const [clickedId, setClickedId] = useState<null | string>(null);
   return (
     <>
       <ThemeProvider theme={darkTheme}>
         <GlobalStyles />
         <Outlet />
-        <Wrapper onClick={toggleClicked}>
+        <Wrapper>
           <Grid>
-            <Box layoutId="amIClicked" />
-            <Box />
-            <Box />
-            <Box />
+            {[1, 2, 3, 4].map((n) => (
+              <Box
+                onClick={() => setClickedId(n + "")}
+                key={n}
+                layoutId={n + ""}
+              />
+            ))}
           </Grid>
           <AnimatePresence>
-            {isClicked ? (
+            {clickedId ? (
               <Overlay
+                onClick={() => setClickedId(null)}
                 initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
                 animate={{ backgroundColor: "rgba(0, 0, 0, 1)" }}
                 exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
               >
                 <Box
-                  layoutId="amIClicked"
+                  layoutId={clickedId}
                   style={{ width: "400px", height: "200px" }}
                 />
               </Overlay>
