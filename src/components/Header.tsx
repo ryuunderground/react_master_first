@@ -127,27 +127,27 @@ const Header = () => {
   };
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (latest > 80) {
-      navAnimation.start({
-        backgroundColor: "rgba(0,0,0,1)",
-      });
+      navAnimation.start("scroll");
     } else {
-      navAnimation.start({
-        backgroundColor: "rgba(0,0,0,0)",
-      });
+      navAnimation.start("top");
     }
   });
+  const navVars = {
+    top: {
+      backgroundColor: "rgba(0,0,0,0)",
+    },
+    scroll: {
+      backgroundColor: "rgba(0,0,0,1)",
+    },
+  };
+
   return (
-    <Nav
-      initial={{
-        backgroundColor: "rgba(0, 0, 0, 0)",
-      }}
-      animate={navAnimation}
-    >
+    <Nav variants={navVars} initial={"top"} animate={navAnimation}>
       <Col>
         <Logo
           variants={logoVars}
           whileHover="active"
-          initial="normal"
+          animate="normal"
           xmlns="http://www.w3.org/2000/svg"
           width="1024"
           height="276.742"
