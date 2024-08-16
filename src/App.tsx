@@ -76,11 +76,13 @@ const Wrapper = styled(motion.div)`
   width: 100vw;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 const Box = styled(motion.div)`
   height: 200px;
-  background-color: rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 40px;
   display: flex;
   font-size: 28px;
@@ -89,16 +91,18 @@ const Box = styled(motion.div)`
   align-items: center;
   position: relative;
 `;
+const Circle = styled(motion.div)`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: white;
+`;
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   width: 50vw;
   gap: 10px;
-  div:first-child,
-  div:last-child {
-    grid-column: span 2;
-  }
 `;
 
 const Overlay = styled(motion.div)`
@@ -108,6 +112,11 @@ const Overlay = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const SwitchBtn = styled.button`
+  width: 100px;
+  font-size: 16px;
 `;
 
 const App = () => {
@@ -124,7 +133,7 @@ const App = () => {
                 onClick={() => setClickedId(n + "")}
                 key={n}
                 layoutId={n + ""}
-              />
+              ></Box>
             ))}
           </Grid>
           <AnimatePresence>
@@ -142,7 +151,9 @@ const App = () => {
               </Overlay>
             ) : null}
           </AnimatePresence>
+          <SwitchBtn>Switch</SwitchBtn>
         </Wrapper>
+
         <ReactQueryDevtools initialIsOpen={true} />
       </ThemeProvider>
     </>
