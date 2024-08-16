@@ -82,14 +82,14 @@ const Wrapper = styled(motion.div)`
 
 const Box = styled(motion.div)`
   height: 200px;
-  background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 40px;
   display: flex;
   font-size: 28px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
   justify-content: center;
   align-items: center;
   position: relative;
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.5);
 `;
 const Circle = styled(motion.div)`
   width: 100px;
@@ -102,7 +102,7 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   width: 50vw;
-  gap: 10px;
+  gap: 30px;
 `;
 
 const Overlay = styled(motion.div)`
@@ -114,13 +114,27 @@ const Overlay = styled(motion.div)`
   align-items: center;
 `;
 
-const SwitchBtn = styled.button`
-  width: 100px;
+const SwitchBtn = styled(motion.button)`
+  width: 80px;
+  height: 30px;
   font-size: 16px;
+  border-radius: 5px;
+  border: none;
+  color: blue;
 `;
 
 const App = () => {
   const [clickedId, setClickedId] = useState<null | string>(null);
+  const [isClicked, setIsClicked] = useState(false);
+  const onClicked = () => {
+    setIsClicked((prev) => !prev);
+  };
+  const btnVars = {
+    tapped: {
+      scale: 1.2,
+      color: "orange",
+    },
+  };
   return (
     <>
       <ThemeProvider theme={darkTheme}>
@@ -133,7 +147,11 @@ const App = () => {
                 onClick={() => setClickedId(n + "")}
                 key={n}
                 layoutId={n + ""}
-              ></Box>
+                whileHover={{ scale: 1.1 }}
+              >
+                {n == 2 && !isClicked ? <Circle layoutId="Circle" /> : null}
+                {n == 3 && isClicked ? <Circle layoutId="Circle" /> : null}
+              </Box>
             ))}
           </Grid>
           <AnimatePresence>
@@ -141,17 +159,26 @@ const App = () => {
               <Overlay
                 onClick={() => setClickedId(null)}
                 initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
-                animate={{ backgroundColor: "rgba(0, 0, 0, 1)" }}
+                animate={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
                 exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
               >
                 <Box
                   layoutId={clickedId}
+                  initial={{ backgroundColor: "rgba(255, 255, 255, 0.5)" }}
+                  animate={{ backgroundColor: "rgba(255, 255, 255, 1)" }}
                   style={{ width: "400px", height: "200px" }}
                 />
               </Overlay>
             ) : null}
           </AnimatePresence>
-          <SwitchBtn>Switch</SwitchBtn>
+          <SwitchBtn
+            variants={btnVars}
+            whileTap="tapped"
+            onClick={onClicked}
+            transition={{ duration: 0.5 }}
+          >
+            Switch
+          </SwitchBtn>
         </Wrapper>
 
         <ReactQueryDevtools initialIsOpen={true} />
