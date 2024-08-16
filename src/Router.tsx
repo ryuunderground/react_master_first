@@ -17,6 +17,11 @@ const router = createBrowserRouter([
         errorElement: <ErrorComponenet />,
       },
       {
+        path: "movies/:movieId",
+        element: <Home />,
+        errorElement: <ErrorComponenet />,
+      },
+      {
         path: "tv",
         element: <Tv />,
         errorElement: <ErrorComponenet />,

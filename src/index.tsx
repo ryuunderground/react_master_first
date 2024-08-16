@@ -6,6 +6,7 @@ import { darkTheme } from "./theme";
 import { ThemeProvider } from "styled-components";
 import { createGlobalStyle } from "styled-components";
 import { RouterProvider } from "react-router-dom";
+
 import router from "./Router";
 
 const GlobalStyles = createGlobalStyle`
@@ -60,8 +61,8 @@ table {
 }
 body{
   font-family: "Source Sans 3", sans-serif;
-  background:white;
-  color: black;
+  background:black;
+  color: ${(props) => props.theme.white.darker}
 }
 
 a{
@@ -76,12 +77,12 @@ const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
   <RecoilRoot>
-    <ThemeProvider theme={darkTheme}>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={darkTheme}>
         <GlobalStyles />
         <RouterProvider router={router} />
-      </QueryClientProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   </RecoilRoot>
 );
 

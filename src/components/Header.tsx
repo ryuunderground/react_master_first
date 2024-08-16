@@ -1,4 +1,4 @@
-import { Link, useMatch } from "react-router-dom";
+import { Link, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
   motion,
@@ -6,7 +6,13 @@ import {
   useScroll,
   useMotionValueEvent,
 } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+//Interfaces
+interface IForm {
+  keyword: string;
+}
 
 //Item Components
 
@@ -71,7 +77,7 @@ const Circle = styled(motion.span)`
   margin: 0 auto;
 `;
 
-const Search = styled.span`
+const Search = styled.form`
   color: white;
   margin: 0 20px;
   display: flex;
@@ -140,6 +146,11 @@ const Header = () => {
       backgroundColor: "rgba(0,0,0,1)",
     },
   };
+  const navigate = useNavigate();
+  const onValid = (data: IForm) => {
+    navigate(`/react_master_graduate/search?keyword=${data.keyword}`);
+  };
+  const { register, handleSubmit } = useForm<IForm>();
 
   return (
     <Nav variants={navVars} initial={"top"} animate={navAnimation}>
@@ -171,7 +182,7 @@ const Header = () => {
         </Items>
       </Col>
       <Col>
-        <Search>
+        <Search onSubmit={handleSubmit(onValid)}>
           <motion.svg
             onClick={toggleSearch}
             transition={{ ease: "linear" }}
@@ -186,7 +197,9 @@ const Header = () => {
               clipRule="evenodd"
             ></path>
           </motion.svg>
+
           <Input
+            {...register("keyword", { required: true, minLength: 2 })}
             animate={inputAnimation}
             transition={{ ease: "linear" }}
             placeholder="Search for movie or tv show"
