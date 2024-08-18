@@ -22,14 +22,28 @@ const router = createBrowserRouter([
         errorElement: <ErrorComponenet />,
       },
       {
-        path: "tv",
+        path: "tv/",
         element: <Tv />,
         errorElement: <ErrorComponenet />,
+        children: [
+          {
+            path: ":showId",
+            element: <Tv />,
+            errorElement: <ErrorComponenet />,
+          },
+        ],
       },
       {
-        path: "search",
+        path: "search/",
         element: <Search />,
         errorElement: <ErrorComponenet />,
+        children: [
+          {
+            path: ":showId",
+            element: <Tv />,
+            errorElement: <ErrorComponenet />,
+          },
+        ],
       },
     ],
     errorElement: <NotFound />,

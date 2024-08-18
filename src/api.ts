@@ -14,6 +14,20 @@ interface IMovie {
   title: string;
   overview: string;
 }
+interface ITv {
+  backdrop_path: string;
+  id: number;
+  poster_path: string;
+  original_name: string;
+  overview: string;
+}
+interface ISearch {
+  id: number;
+  name: string;
+  backdrop_path: string;
+  overview: string;
+  title: string;
+}
 
 export interface IGetMoviesResult {
   dates: {
@@ -26,11 +40,48 @@ export interface IGetMoviesResult {
   total_results: number;
 }
 
-export const getMovies = async (lang: string, page?: number) => {
+export interface IGetTvsResult {
+  page: number;
+  results: ITv[];
+  total_pages: number;
+  total_results: number;
+}
+
+export interface IGetSearchResult {
+  page: number;
+  results: ISearch[];
+  total_pages: number;
+  total_results: number;
+}
+
+export const getMovies = async (lang: string, type: string, page?: number) => {
   const response = await axios.get(
-    `${BASE_URL}/movie/now_playing?language=${lang}&page=${
+    `${BASE_URL}/movie/${type}?language=${lang}&page=${
       page ?? 1
     }&api_key=${API_KEY}`
+  );
+  console.log(response);
+  return response.data;
+};
+export const getTvs = async (lang: string, type: string, page?: number) => {
+  const response = await axios.get(
+    `${BASE_URL}/tv/${type}?language=${lang}&page=${
+      page ?? 1
+    }&api_key=${API_KEY}`
+  );
+  console.log(response);
+  return response.data;
+};
+
+export const getSearchs = async (
+  lang: string,
+  keyword: string,
+  page?: number
+) => {
+  const response = await axios.get(
+    `${BASE_URL}/search/multi?api_key=${API_KEY}&language=${lang}&page=${
+      page ?? 1
+    }&query=${keyword}&include_adult=true`
   );
   console.log(response);
   return response.data;
