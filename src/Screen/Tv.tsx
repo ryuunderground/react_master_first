@@ -33,6 +33,14 @@ const Title = styled.h2`
   font-size: 48px;
   margin-bottom: 10px;
 `;
+const ArrowBtn = styled.button`
+  height: 26px;
+  width: 26px;
+  background-color: transparent;
+  border: 1px solid #ffffff;
+  border-radius: 50%;
+  color: white;
+`;
 const Overview = styled.p`
   font-size: 20px;
   width: 50%;
@@ -48,6 +56,10 @@ const SliderTitle = styled.h1`
   font-size: 26px;
   padding: 10px;
   background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
 `;
 const Slider = styled.div`
   position: relative;
@@ -195,20 +207,87 @@ const Tv = () => {
     useQuery<IGetTvsResult>(["tv", "popular"], () =>
       getTvs("en-US", "popular")
     );
-  const [index, setIndex] = useState(0);
+  const [indexNP, setIndexNP] = useState(0);
+  const [indexUP, setIndexUP] = useState(0);
+  const [indexTR, setIndexTR] = useState(0);
+  const [indexP, setIndexP] = useState(0);
   const [isLeaving, setIsLeaving] = useState(false);
-  const increaseIndex = () => {
+  const increaseIndexNP = () => {
     if (tvNowPlaying) {
       if (isLeaving) return;
       toggleLeaving();
-      const totalTvs = tvNowPlaying.results.length - 1;
-      const maxIndex = Math.floor(totalTvs / offset) - 1;
-      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+      const totalMovies = tvNowPlaying.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setIndexNP((prev) => (prev === maxIndex ? 0 : prev + 1));
+    }
+  };
+  const increaseIndexUP = () => {
+    if (tvOncoming) {
+      if (isLeaving) return;
+      toggleLeaving();
+      const totalMovies = tvOncoming.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setIndexUP((prev) => (prev === maxIndex ? 0 : prev + 1));
+    }
+  };
+  const increaseIndexTR = () => {
+    if (tvTopRated) {
+      if (isLeaving) return;
+      toggleLeaving();
+      const totalMovies = tvTopRated.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setIndexTR((prev) => (prev === maxIndex ? 0 : prev + 1));
+    }
+  };
+  const increaseIndexP = () => {
+    if (tvPopular) {
+      if (isLeaving) return;
+      toggleLeaving();
+      const totalMovies = tvPopular.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setIndexP((prev) => (prev === maxIndex ? 0 : prev + 1));
+    }
+  };
+  const decreaseIndexNP = () => {
+    if (tvNowPlaying) {
+      if (isLeaving) return;
+      toggleLeaving();
+      const totalMovies = tvNowPlaying.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setIndexNP((prev) => (prev === 0 ? maxIndex : prev - 1));
+    }
+  };
+  const decreaseIndexUP = () => {
+    if (tvOncoming) {
+      if (isLeaving) return;
+      toggleLeaving();
+      const totalMovies = tvOncoming.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setIndexUP((prev) => (prev === 0 ? maxIndex : prev - 1));
+    }
+  };
+  const decreaseIndexTR = () => {
+    if (tvTopRated) {
+      if (isLeaving) return;
+      toggleLeaving();
+      const totalMovies = tvTopRated.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setIndexTR((prev) => (prev === 0 ? maxIndex : prev - 1));
+    }
+  };
+  const decreaseIndexP = () => {
+    if (tvPopular) {
+      if (isLeaving) return;
+      toggleLeaving();
+      const totalMovies = tvPopular.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setIndexP((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
   const toggleLeaving = () => {
     setIsLeaving((prev) => !prev);
   };
+
   const offset = 6;
   const onBoxClicked = (showId: number) => {
     navigate(`/react_master_graduate/tv/${showId}`);
@@ -244,7 +323,7 @@ const Tv = () => {
       ) : (
         <>
           <Banner
-            onClick={increaseIndex}
+            onClick={increaseIndexNP}
             bgPhoto={makeImagePath(
               tvNowPlaying?.results[0].backdrop_path || ""
             )}
@@ -255,7 +334,10 @@ const Tv = () => {
           <Sliders>
             {/* Airing Today*/}
             <Slider>
-              <SliderTitle>Airing Today</SliderTitle>
+              <SliderTitle>
+                <ArrowBtn onClick={decreaseIndexNP}>&lt;</ArrowBtn>Airing Today
+                <ArrowBtn onClick={increaseIndexNP}>&gt;</ArrowBtn>
+              </SliderTitle>
               <AnimatePresence onExitComplete={toggleLeaving} initial={false}>
                 <Row
                   variants={rowVars}
@@ -263,15 +345,15 @@ const Tv = () => {
                   animate="visible"
                   exit="exit"
                   transition={{ type: "tween", duration: 1 }}
-                  key={index}
+                  key={indexNP}
                 >
                   {tvNowPlaying?.results
                     .slice(1)
-                    .slice(offset * index, offset * index + offset)
+                    .slice(offset * indexNP, offset * indexNP + offset)
                     .map((tv) => (
                       <Box
-                        layoutId={tv.id + ""}
-                        key={tv.id}
+                        layoutId={`${tv.id}NP`}
+                        key={`${tv.id}NP`}
                         bgPhoto={makeImagePath(tv.backdrop_path, "w500")}
                         whileHover="hover"
                         initial="normal"
@@ -323,7 +405,11 @@ const Tv = () => {
             ) : (
               <>
                 <Slider>
-                  <SliderTitle>On the Air</SliderTitle>
+                  <SliderTitle>
+                    <ArrowBtn onClick={decreaseIndexUP}>&lt;</ArrowBtn>On the
+                    Air
+                    <ArrowBtn onClick={increaseIndexUP}>&gt;</ArrowBtn>
+                  </SliderTitle>
                   <AnimatePresence
                     onExitComplete={toggleLeaving}
                     initial={false}
@@ -334,15 +420,15 @@ const Tv = () => {
                       animate="visible"
                       exit="exit"
                       transition={{ type: "tween", duration: 1 }}
-                      key={index}
+                      key={indexUP}
                     >
                       {tvOncoming?.results
                         .slice(1)
-                        .slice(offset * index, offset * index + offset)
+                        .slice(offset * indexUP, offset * indexUP + offset)
                         .map((tv) => (
                           <Box
-                            layoutId={tv.id + ""}
-                            key={tv.id}
+                            layoutId={`${tv.id}UP`}
+                            key={`${tv.id}UP`}
                             bgPhoto={makeImagePath(tv.backdrop_path, "w500")}
                             whileHover="hover"
                             initial="normal"
@@ -396,7 +482,10 @@ const Tv = () => {
             ) : (
               <>
                 <Slider>
-                  <SliderTitle>Top Rated</SliderTitle>
+                  <SliderTitle>
+                    <ArrowBtn onClick={decreaseIndexTR}>&lt;</ArrowBtn>Top Rated
+                    <ArrowBtn onClick={increaseIndexTR}>&gt;</ArrowBtn>
+                  </SliderTitle>
                   <AnimatePresence
                     onExitComplete={toggleLeaving}
                     initial={false}
@@ -407,15 +496,15 @@ const Tv = () => {
                       animate="visible"
                       exit="exit"
                       transition={{ type: "tween", duration: 1 }}
-                      key={index}
+                      key={indexTR}
                     >
                       {tvTopRated?.results
                         .slice(1)
-                        .slice(offset * index, offset * index + offset)
+                        .slice(offset * indexTR, offset * indexTR + offset)
                         .map((tv) => (
                           <Box
-                            layoutId={tv.id + ""}
-                            key={tv.id}
+                            layoutId={`${tv.id}TR`}
+                            key={`${tv.id}TR`}
                             bgPhoto={makeImagePath(tv.backdrop_path, "w500")}
                             whileHover="hover"
                             initial="normal"
@@ -469,7 +558,10 @@ const Tv = () => {
             ) : (
               <>
                 <Slider>
-                  <SliderTitle>Popular</SliderTitle>
+                  <SliderTitle>
+                    <ArrowBtn onClick={decreaseIndexP}>&lt;</ArrowBtn>Popular
+                    <ArrowBtn onClick={increaseIndexP}>&gt;</ArrowBtn>
+                  </SliderTitle>
                   <AnimatePresence
                     onExitComplete={toggleLeaving}
                     initial={false}
@@ -480,15 +572,15 @@ const Tv = () => {
                       animate="visible"
                       exit="exit"
                       transition={{ type: "tween", duration: 1 }}
-                      key={index}
+                      key={indexP}
                     >
                       {tvPopular?.results
                         .slice(1)
-                        .slice(offset * index, offset * index + offset)
+                        .slice(offset * indexP, offset * indexP + offset)
                         .map((tv) => (
                           <Box
-                            layoutId={tv.id + ""}
-                            key={tv.id}
+                            layoutId={`${tv.id}P`}
+                            key={`${tv.id}P`}
                             bgPhoto={makeImagePath(tv.backdrop_path, "w500")}
                             whileHover="hover"
                             initial="normal"
