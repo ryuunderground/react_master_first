@@ -147,6 +147,19 @@ const Overlay = styled(motion.div)`
   opacity: 0;
 `;
 
+const Error = styled.h3`
+  color: ${(props) => props.theme.white.lighter};
+  padding: 20px;
+  font-size: 46px;
+  position: relative;
+  top: 0;
+`;
+const ErrorMessage = styled.p`
+  color: ${(props) => props.theme.white.lighter};
+  padding: 20px;
+  font-size: 24px;
+`;
+
 //Variants
 const rowVars = {
   hidden: {
@@ -191,6 +204,8 @@ const Tv = () => {
   const navigate = useNavigate();
   const bigtvMatch = useMatch("react_master_graduate/tv/:showId");
   const { scrollY } = useScroll();
+
+  //정보 가져오기
   const { data: tvNowPlaying, isLoading: tvNowLoading } =
     useQuery<IGetTvsResult>(["tv", "nowPlaying"], () =>
       getTvs("en-US", "airing_today")
@@ -207,6 +222,8 @@ const Tv = () => {
     useQuery<IGetTvsResult>(["tv", "popular"], () =>
       getTvs("en-US", "popular")
     );
+
+  //인덱스 넘기기
   const [indexNP, setIndexNP] = useState(0);
   const [indexUP, setIndexUP] = useState(0);
   const [indexTR, setIndexTR] = useState(0);
@@ -381,7 +398,7 @@ const Tv = () => {
                     layoutId={bigtvMatch?.params.showId + ""}
                     style={{ top: scrollY.get() + 100 }}
                   >
-                    {clickedtvNow && (
+                    {clickedtvNow ? (
                       <>
                         <BigCover
                           style={{
@@ -393,6 +410,11 @@ const Tv = () => {
                         />
                         <BigTitle>{clickedtvNow.original_name}</BigTitle>
                         <BigOverview>{clickedtvNow.overview}</BigOverview>
+                      </>
+                    ) : (
+                      <>
+                        <Error>404 Error &#40;</Error>
+                        <ErrorMessage>Sorry. Cannot load</ErrorMessage>
                       </>
                     )}
                   </Bigtv>
@@ -456,7 +478,7 @@ const Tv = () => {
                         layoutId={bigtvMatch?.params.showId + ""}
                         style={{ top: scrollY.get() + 100 }}
                       >
-                        {clickedtvOn && (
+                        {clickedtvOn ? (
                           <>
                             <BigCover
                               style={{
@@ -468,6 +490,11 @@ const Tv = () => {
                             />
                             <BigTitle>{clickedtvOn.original_name}</BigTitle>
                             <BigOverview>{clickedtvOn.overview}</BigOverview>
+                          </>
+                        ) : (
+                          <>
+                            <Error>404 Error &#40;</Error>
+                            <ErrorMessage>Sorry. Cannot load</ErrorMessage>
                           </>
                         )}
                       </Bigtv>
@@ -532,7 +559,7 @@ const Tv = () => {
                         layoutId={bigtvMatch?.params.showId + ""}
                         style={{ top: scrollY.get() + 100 }}
                       >
-                        {clickedtvTop && (
+                        {clickedtvTop ? (
                           <>
                             <BigCover
                               style={{
@@ -544,6 +571,11 @@ const Tv = () => {
                             />
                             <BigTitle>{clickedtvTop.original_name}</BigTitle>
                             <BigOverview>{clickedtvTop.overview}</BigOverview>
+                          </>
+                        ) : (
+                          <>
+                            <Error>404 Error &#40;</Error>
+                            <ErrorMessage>Sorry. Cannot load</ErrorMessage>
                           </>
                         )}
                       </Bigtv>
@@ -608,7 +640,7 @@ const Tv = () => {
                         layoutId={bigtvMatch?.params.showId + ""}
                         style={{ top: scrollY.get() + 100 }}
                       >
-                        {clickedtvPop && (
+                        {clickedtvPop ? (
                           <>
                             <BigCover
                               style={{
@@ -620,6 +652,11 @@ const Tv = () => {
                             />
                             <BigTitle>{clickedtvPop.original_name}</BigTitle>
                             <BigOverview>{clickedtvPop.overview}</BigOverview>
+                          </>
+                        ) : (
+                          <>
+                            <Error>404 Error &#40;</Error>
+                            <ErrorMessage>Sorry. Cannot load</ErrorMessage>
                           </>
                         )}
                       </Bigtv>

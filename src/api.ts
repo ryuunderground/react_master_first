@@ -60,7 +60,6 @@ export const getMovies = async (lang: string, type: string, page?: number) => {
       page ?? 1
     }&api_key=${API_KEY}`
   );
-  console.log(response);
   return response.data;
 };
 export const getTvs = async (lang: string, type: string, page?: number) => {
@@ -69,7 +68,6 @@ export const getTvs = async (lang: string, type: string, page?: number) => {
       page ?? 1
     }&api_key=${API_KEY}`
   );
-  console.log(response);
   return response.data;
 };
 
@@ -83,6 +81,5 @@ export const getSearchs = async (
       page ?? 1
     }&query=${keyword}&include_adult=true`
   );
-  console.log(response);
   return response.data;
 };

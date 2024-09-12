@@ -215,7 +215,11 @@ const Search = () => {
                     <Box
                       layoutId={search.id + ""}
                       key={search.id}
-                      bgPhoto={makeImagePath(search.backdrop_path, "w500")}
+                      bgPhoto={
+                        search.backdrop_path
+                          ? makeImagePath(search.backdrop_path, "w500")
+                          : null
+                      }
                       whileHover="hover"
                       initial="normal"
                       variants={boxVars}
@@ -227,6 +231,7 @@ const Search = () => {
                           {search.name !== null ? search.name : search.title}
                         </h4>
                       </Info>
+                      <span>No Image Contents</span>
                     </Box>
                   ))}
               </Row>
@@ -246,14 +251,20 @@ const Search = () => {
                 >
                   {clickedSearch && (
                     <>
-                      <BigCover
-                        style={{
-                          backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
-                            clickedSearch.backdrop_path,
-                            "w500"
-                          )})`,
-                        }}
-                      />
+                      {clickedSearch.backdrop_path ? (
+                        <BigCover
+                          style={{
+                            backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+                              clickedSearch.backdrop_path,
+                              "w500"
+                            )})`,
+                          }}
+                        />
+                      ) : (
+                        <BigCover>
+                          <span>No Image Contents</span>
+                        </BigCover>
+                      )}
                       <BigTitle>
                         {clickedSearch.name !== null
                           ? clickedSearch.name

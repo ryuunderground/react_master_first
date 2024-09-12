@@ -6,7 +6,7 @@ import { makeImagePath } from "../utils";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { useState } from "react";
 import { off } from "process";
-import { useMatch, useNavigate } from "react-router-dom";
+import { useMatch, useNavigate, useParams } from "react-router-dom";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -309,22 +309,22 @@ const Home = () => {
   const clickedMovieNP =
     bigMovieMatch?.params.movieId &&
     movieNowPlaying?.results.find(
-      (movie) => String(movie.id) === bigMovieMatch?.params.movieId
+      (movie) => String(movie.id) === bigMovieMatch?.params.movieId!
     );
   const clickedMovieUP =
     bigMovieMatch?.params.movieId &&
     movieUpcoming?.results.find(
-      (movie) => String(movie.id) === bigMovieMatch?.params.movieId
+      (movie) => String(movie.id) === bigMovieMatch?.params.movieId!
     );
   const clickedMovieTR =
     bigMovieMatch?.params.movieId &&
     movieTopRated?.results.find(
-      (movie) => String(movie.id) === bigMovieMatch?.params.movieId
+      (movie) => String(movie.id) === bigMovieMatch?.params.movieId!
     );
   const clickedMovieP =
     bigMovieMatch?.params.movieId &&
     moviePopular?.results.find(
-      (movie) => String(movie.id) === bigMovieMatch?.params.movieId
+      (movie) => String(movie.id) === bigMovieMatch?.params.movieId!
     );
 
   return (
@@ -408,7 +408,6 @@ const Home = () => {
                     ) : (
                       <>
                         <Error>404 Error &#40;</Error>
-
                         <ErrorMessage>Sorry. Cannot load</ErrorMessage>
                       </>
                     )}
@@ -488,7 +487,6 @@ const Home = () => {
                         ) : (
                           <>
                             <Error>404 Error &40;</Error>
-
                             <ErrorMessage>Sorry. Cannot load</ErrorMessage>
                           </>
                         )}
