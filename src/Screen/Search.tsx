@@ -41,7 +41,7 @@ const Row = styled(motion.div)`
   width: 100%;
 `;
 
-const Box = styled(motion.div)<{ bgPhoto: string }>`
+const Box = styled(motion.div)<{ bgPhoto: string | null }>`
   background-color: white;
   height: 200px;
   font-size: 36px;
@@ -87,7 +87,12 @@ const BigCover = styled.div`
   background-position: center center;
   height: 300px;
 `;
-
+const NoImg = styled.span`
+  font-size: 36px;
+  height: 300px;
+  margin: 50px;
+  margin-top: 50px;
+`;
 const BigTitle = styled.h3`
   color: ${(props) => props.theme.white.lighter};
   padding: 20px;
@@ -218,7 +223,7 @@ const Search = () => {
                       bgPhoto={
                         search.backdrop_path
                           ? makeImagePath(search.backdrop_path, "w500")
-                          : null
+                          : makeImagePath(search.poster_path, "w500")
                       }
                       whileHover="hover"
                       initial="normal"
@@ -227,11 +232,8 @@ const Search = () => {
                       onClick={() => onBoxClicked(search.id)}
                     >
                       <Info variants={infoVars}>
-                        <h4>
-                          {search.name !== null ? search.name : search.title}
-                        </h4>
+                        <h4>{search.name || search.title || keyword}</h4>
                       </Info>
-                      <span>No Image Contents</span>
                     </Box>
                   ))}
               </Row>
@@ -260,15 +262,28 @@ const Search = () => {
                             )})`,
                           }}
                         />
+                      ) : clickedSearch.poster_path ? (
+                        <BigCover
+                          style={{
+                            backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+                              clickedSearch.poster_path,
+                              "w500"
+                            )})`,
+                          }}
+                        />
                       ) : (
-                        <BigCover>
-                          <span>No Image Contents</span>
+                        <BigCover
+                          style={{
+                            backgroundImage: `linear-gradient(to top, black, transparent)
+                              "w500"
+                            )})`,
+                          }}
+                        >
+                          <NoImg>No Image Contents</NoImg>
                         </BigCover>
                       )}
                       <BigTitle>
-                        {clickedSearch.name !== null
-                          ? clickedSearch.name
-                          : clickedSearch.title}
+                        {clickedSearch.name || clickedSearch.title || keyword}
                       </BigTitle>
                       <BigOverview>{clickedSearch.overview}</BigOverview>
                     </>

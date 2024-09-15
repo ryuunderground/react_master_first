@@ -311,11 +311,13 @@ const Home = () => {
     movieNowPlaying?.results.find(
       (movie) => String(movie.id) === bigMovieMatch?.params.movieId!
     );
+
   const clickedMovieUP =
     bigMovieMatch?.params.movieId &&
     movieUpcoming?.results.find(
       (movie) => String(movie.id) === bigMovieMatch?.params.movieId!
     );
+  console.log(clickedMovieUP);
   const clickedMovieTR =
     bigMovieMatch?.params.movieId &&
     movieTopRated?.results.find(
@@ -486,7 +488,7 @@ const Home = () => {
                           </>
                         ) : (
                           <>
-                            <Error>404 Error &40;</Error>
+                            <Error>Undefined ID &40;</Error>
                             <ErrorMessage>Sorry. Cannot load</ErrorMessage>
                           </>
                         )}
