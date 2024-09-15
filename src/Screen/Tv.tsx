@@ -115,6 +115,7 @@ const Bigtv = styled(motion.div)`
   margin: 0 auto;
   border-radius: 15px;
   overflow: hidden;
+  z-index: 99;
 `;
 const BigCover = styled.div`
   width: 100%;
@@ -145,6 +146,7 @@ const Overlay = styled(motion.div)`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   opacity: 0;
+  z-index: 98;
 `;
 
 const Error = styled.h3`
