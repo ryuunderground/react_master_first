@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/react_master_lastChallenge/static/js/main.335c1c9f.js",
-    "index.html": "/react_master_lastChallenge/index.html",
-    "main.335c1c9f.js.map": "/react_master_lastChallenge/static/js/main.335c1c9f.js.map"
+    "main.js": "/react_master_graduate/static/js/main.affedbc6.js",
+    "index.html": "/react_master_graduate/index.html",
+    "main.affedbc6.js.map": "/react_master_graduate/static/js/main.affedbc6.js.map"
   },
   "entrypoints": [
-    "static/js/main.335c1c9f.js"
+    "static/js/main.affedbc6.js"
   ]
 }
