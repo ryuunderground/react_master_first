@@ -201,7 +201,10 @@ const infoVars = {
 //main Fn
 const Home = () => {
   const navigate = useNavigate();
-  const bigMovieMatch = useMatch("react_master_graduate/movies/:movieId");
+  const bigMovieMatchNP = useMatch("react_master_graduate/moviesNP/:movieId");
+  const bigMovieMatchUP = useMatch("react_master_graduate/moviesUP/:movieId");
+  const bigMovieMatchTR = useMatch("react_master_graduate/moviesTR/:movieId");
+  const bigMovieMatchP = useMatch("react_master_graduate/moviesP/:movieId");
   const { scrollY } = useScroll();
   const { data: movieNowPlaying, isLoading: movieNowLoading } =
     useQuery<IGetMoviesResult>(["movies", "nowPlaying"], () =>
@@ -300,33 +303,43 @@ const Home = () => {
     setIsLeaving((prev) => !prev);
   };
   const offset = 6;
-  const onBoxClicked = (movieId: number) => {
-    navigate(`/react_master_graduate/movies/${movieId}`);
+  const onBoxClickedNP = (movieId: number) => {
+    navigate(`/react_master_graduate/moviesNP/${movieId}`);
   };
+  const onBoxClickedUP = (movieId: number) => {
+    navigate(`/react_master_graduate/moviesUP/${movieId}`);
+  };
+  const onBoxClickedTR = (movieId: number) => {
+    navigate(`/react_master_graduate/moviesTR/${movieId}`);
+  };
+  const onBoxClickedP = (movieId: number) => {
+    navigate(`/react_master_graduate/moviesP/${movieId}`);
+  };
+
   const onOverlayClicked = () => {
     navigate(-1);
   };
   const clickedMovieNP =
-    bigMovieMatch?.params.movieId &&
+    bigMovieMatchNP?.params.movieId &&
     movieNowPlaying?.results.find(
-      (movie) => String(movie.id) === bigMovieMatch?.params.movieId!
+      (movie) => movie.id === +bigMovieMatchNP?.params.movieId!
     );
 
   const clickedMovieUP =
-    bigMovieMatch?.params.movieId &&
+    bigMovieMatchUP?.params.movieId &&
     movieUpcoming?.results.find(
-      (movie) => String(movie.id) === bigMovieMatch?.params.movieId!
+      (movie) => movie.id === +bigMovieMatchUP?.params.movieId!
     );
-  console.log(clickedMovieUP);
+
   const clickedMovieTR =
-    bigMovieMatch?.params.movieId &&
+    bigMovieMatchTR?.params.movieId &&
     movieTopRated?.results.find(
-      (movie) => String(movie.id) === bigMovieMatch?.params.movieId!
+      (movie) => movie.id === +bigMovieMatchTR?.params.movieId!
     );
   const clickedMovieP =
-    bigMovieMatch?.params.movieId &&
+    bigMovieMatchP?.params.movieId &&
     moviePopular?.results.find(
-      (movie) => String(movie.id) === bigMovieMatch?.params.movieId!
+      (movie) => movie.id === +bigMovieMatchP?.params.movieId!
     );
 
   return (
@@ -372,7 +385,7 @@ const Home = () => {
                         initial="normal"
                         variants={boxVars}
                         transition={{ type: "tween" }}
-                        onClick={() => onBoxClicked(movie.id)}
+                        onClick={() => onBoxClickedNP(movie.id)}
                       >
                         <Info variants={infoVars}>
                           <h4>{movie.title}</h4>
@@ -383,7 +396,7 @@ const Home = () => {
               </AnimatePresence>
             </Slider>
             <AnimatePresence>
-              {bigMovieMatch ? (
+              {bigMovieMatchNP ? (
                 <>
                   <Overlay
                     onClick={onOverlayClicked}
@@ -391,7 +404,7 @@ const Home = () => {
                     exit={{ opacity: 0 }}
                   ></Overlay>
                   <BigMovie
-                    layoutId={bigMovieMatch?.params.movieId + ""}
+                    layoutId={bigMovieMatchNP?.params.movieId + ""}
                     style={{ top: scrollY.get() + 100 }}
                   >
                     {clickedMovieNP ? (
@@ -405,7 +418,9 @@ const Home = () => {
                           }}
                         />
                         <BigTitle>{clickedMovieNP.title}</BigTitle>
-                        <BigOverview>{clickedMovieNP.overview}</BigOverview>
+                        <BigOverview>
+                          {clickedMovieNP.overview || "No overview settled"}
+                        </BigOverview>
                       </>
                     ) : (
                       <>
@@ -451,7 +466,7 @@ const Home = () => {
                             initial="normal"
                             variants={boxVars}
                             transition={{ type: "tween" }}
-                            onClick={() => onBoxClicked(movie.id)}
+                            onClick={() => onBoxClickedUP(movie.id)}
                           >
                             <Info variants={infoVars}>
                               <h4>{movie.title}</h4>
@@ -462,7 +477,7 @@ const Home = () => {
                   </AnimatePresence>
                 </Slider>
                 <AnimatePresence>
-                  {bigMovieMatch ? (
+                  {bigMovieMatchUP ? (
                     <>
                       <Overlay
                         onClick={onOverlayClicked}
@@ -470,7 +485,7 @@ const Home = () => {
                         exit={{ opacity: 0 }}
                       ></Overlay>
                       <BigMovie
-                        layoutId={bigMovieMatch?.params.movieId + ""}
+                        layoutId={bigMovieMatchUP?.params.movieId + ""}
                         style={{ top: scrollY.get() + 100 }}
                       >
                         {clickedMovieUP ? (
@@ -484,7 +499,9 @@ const Home = () => {
                               }}
                             />
                             <BigTitle>{clickedMovieUP.title}</BigTitle>
-                            <BigOverview>{clickedMovieUP.overview}</BigOverview>
+                            <BigOverview>
+                              {clickedMovieUP.overview || "No overview settled"}
+                            </BigOverview>
                           </>
                         ) : (
                           <>
@@ -532,7 +549,7 @@ const Home = () => {
                             initial="normal"
                             variants={boxVars}
                             transition={{ type: "tween" }}
-                            onClick={() => onBoxClicked(movie.id)}
+                            onClick={() => onBoxClickedTR(movie.id)}
                           >
                             <Info variants={infoVars}>
                               <h4>{movie.title}</h4>
@@ -543,7 +560,7 @@ const Home = () => {
                   </AnimatePresence>
                 </Slider>
                 <AnimatePresence>
-                  {bigMovieMatch ? (
+                  {bigMovieMatchTR ? (
                     <>
                       <Overlay
                         onClick={onOverlayClicked}
@@ -551,7 +568,7 @@ const Home = () => {
                         exit={{ opacity: 0 }}
                       ></Overlay>
                       <BigMovie
-                        layoutId={bigMovieMatch?.params.movieId + ""}
+                        layoutId={bigMovieMatchTR?.params.movieId + ""}
                         style={{ top: scrollY.get() + 100 }}
                       >
                         {clickedMovieTR ? (
@@ -565,7 +582,9 @@ const Home = () => {
                               }}
                             />
                             <BigTitle>{clickedMovieTR.title}</BigTitle>
-                            <BigOverview>{clickedMovieTR.overview}</BigOverview>
+                            <BigOverview>
+                              {clickedMovieTR.overview || "No overview settled"}
+                            </BigOverview>
                           </>
                         ) : (
                           <>
@@ -616,7 +635,7 @@ const Home = () => {
                             initial="normal"
                             variants={boxVars}
                             transition={{ type: "tween" }}
-                            onClick={() => onBoxClicked(movie.id)}
+                            onClick={() => onBoxClickedP(movie.id)}
                           >
                             <Info variants={infoVars}>
                               <h4>{movie.title}</h4>
@@ -627,7 +646,7 @@ const Home = () => {
                   </AnimatePresence>
                 </Slider>
                 <AnimatePresence>
-                  {bigMovieMatch ? (
+                  {bigMovieMatchP ? (
                     <>
                       <Overlay
                         onClick={onOverlayClicked}
@@ -635,7 +654,7 @@ const Home = () => {
                         exit={{ opacity: 0 }}
                       ></Overlay>
                       <BigMovie
-                        layoutId={bigMovieMatch?.params.movieId + ""}
+                        layoutId={bigMovieMatchP?.params.movieId + ""}
                         style={{ top: scrollY.get() + 100 }}
                       >
                         {clickedMovieP ? (
@@ -649,11 +668,13 @@ const Home = () => {
                               }}
                             />
                             <BigTitle>{clickedMovieP.title}</BigTitle>
-                            <BigOverview>{clickedMovieP.overview}</BigOverview>
+                            <BigOverview>
+                              {clickedMovieP.overview || "No overview settled"}
+                            </BigOverview>
                           </>
                         ) : (
                           <>
-                            <Error> Error :&#40;</Error>
+                            <Error> ErrorPopular :&#40;</Error>
                             <ErrorMessage>
                               Sorry. Id from API might not same with chosen
                               movie

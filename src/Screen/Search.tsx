@@ -26,6 +26,18 @@ const SliderTitle = styled.h1`
   font-size: 26px;
   padding: 10px;
   background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+`;
+const ArrowBtn = styled.button`
+  height: 26px;
+  width: 26px;
+  background-color: transparent;
+  border: 1px solid #ffffff;
+  border-radius: 50%;
+  color: white;
 `;
 const Slider = styled.div`
   top: -100px;
@@ -179,6 +191,15 @@ const Search = () => {
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
+  const decreaseIndex = () => {
+    if (searchResult) {
+      if (isLeaving) return;
+      toggleLeaving();
+      const totalSearchs = searchResult.results.length - 1;
+      const maxIndex = Math.floor(totalSearchs / offset) - 1;
+      setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+    }
+  };
   const toggleLeaving = () => {
     setIsLeaving((prev) => !prev);
   };
@@ -201,8 +222,10 @@ const Search = () => {
       ) : (
         <>
           <Slider>
-            <SliderTitle onClick={increaseIndex}>
+            <SliderTitle>
+              <ArrowBtn onClick={decreaseIndex}>&lt;</ArrowBtn>
               Search Result for '{keyword}'
+              <ArrowBtn onClick={increaseIndex}>&gt;</ArrowBtn>
             </SliderTitle>
             <AnimatePresence onExitComplete={toggleLeaving} initial={false}>
               <Row

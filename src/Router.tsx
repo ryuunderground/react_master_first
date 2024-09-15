@@ -17,7 +17,22 @@ const router = createBrowserRouter([
         errorElement: <ErrorComponenet />,
       },
       {
-        path: "movies/:movieId",
+        path: "moviesNP/:movieId",
+        element: <Home />,
+        errorElement: <ErrorComponenet />,
+      },
+      {
+        path: "moviesUP/:movieId",
+        element: <Home />,
+        errorElement: <ErrorComponenet />,
+      },
+      {
+        path: "moviesTR/:movieId",
+        element: <Home />,
+        errorElement: <ErrorComponenet />,
+      },
+      {
+        path: "moviesP/:movieId",
         element: <Home />,
         errorElement: <ErrorComponenet />,
       },
@@ -27,7 +42,22 @@ const router = createBrowserRouter([
         errorElement: <ErrorComponenet />,
         children: [
           {
-            path: ":showId",
+            path: "Now/:showId",
+            element: <Tv />,
+            errorElement: <ErrorComponenet />,
+          },
+          {
+            path: "On/:showId",
+            element: <Tv />,
+            errorElement: <ErrorComponenet />,
+          },
+          {
+            path: "Top/:showId",
+            element: <Tv />,
+            errorElement: <ErrorComponenet />,
+          },
+          {
+            path: "Pop/:showId",
             element: <Tv />,
             errorElement: <ErrorComponenet />,
           },

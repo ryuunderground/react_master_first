@@ -202,7 +202,10 @@ const infoVars = {
 //main Fn
 const Tv = () => {
   const navigate = useNavigate();
-  const bigtvMatch = useMatch("react_master_graduate/tv/:showId");
+  const bigtvMatchNow = useMatch("react_master_graduate/tv/Now/:showId");
+  const bigtvMatchOn = useMatch("react_master_graduate/tv/On/:showId");
+  const bigtvMatchTop = useMatch("react_master_graduate/tv/Top/:showId");
+  const bigtvMatchPop = useMatch("react_master_graduate/tv/Pop/:showId");
   const { scrollY } = useScroll();
 
   //정보 가져오기
@@ -306,31 +309,40 @@ const Tv = () => {
   };
 
   const offset = 6;
-  const onBoxClicked = (showId: number) => {
-    navigate(`/react_master_graduate/tv/${showId}`);
+  const onBoxClickedNow = (showId: number) => {
+    navigate(`/react_master_graduate/tv/Now/${showId}`);
+  };
+  const onBoxClickedOn = (showId: number) => {
+    navigate(`/react_master_graduate/tv/On/${showId}`);
+  };
+  const onBoxClickedTop = (showId: number) => {
+    navigate(`/react_master_graduate/tv/Top/${showId}`);
+  };
+  const onBoxClickedPop = (showId: number) => {
+    navigate(`/react_master_graduate/tv/Pop/${showId}`);
   };
   const onOverlayClicked = () => {
     navigate(-1);
   };
   const clickedtvNow =
-    bigtvMatch?.params.showId &&
+    bigtvMatchNow?.params.showId &&
     tvNowPlaying?.results.find(
-      (tv) => String(tv.id) === bigtvMatch?.params.showId
+      (tv) => String(tv.id) === bigtvMatchNow?.params.showId
     );
   const clickedtvOn =
-    bigtvMatch?.params.showId &&
+    bigtvMatchOn?.params.showId &&
     tvOncoming?.results.find(
-      (tv) => String(tv.id) === bigtvMatch?.params.showId
+      (tv) => String(tv.id) === bigtvMatchOn?.params.showId
     );
   const clickedtvTop =
-    bigtvMatch?.params.showId &&
+    bigtvMatchTop?.params.showId &&
     tvTopRated?.results.find(
-      (tv) => String(tv.id) === bigtvMatch?.params.showId
+      (tv) => String(tv.id) === bigtvMatchTop?.params.showId
     );
   const clickedtvPop =
-    bigtvMatch?.params.showId &&
+    bigtvMatchPop?.params.showId &&
     tvPopular?.results.find(
-      (tv) => String(tv.id) === bigtvMatch?.params.showId
+      (tv) => String(tv.id) === bigtvMatchPop?.params.showId
     );
 
   return (
@@ -376,7 +388,7 @@ const Tv = () => {
                         initial="normal"
                         variants={boxVars}
                         transition={{ type: "tween" }}
-                        onClick={() => onBoxClicked(tv.id)}
+                        onClick={() => onBoxClickedNow(tv.id)}
                       >
                         <Info variants={infoVars}>
                           <h4>{tv.original_name}</h4>
@@ -387,7 +399,7 @@ const Tv = () => {
               </AnimatePresence>
             </Slider>
             <AnimatePresence>
-              {bigtvMatch ? (
+              {bigtvMatchNow ? (
                 <>
                   <Overlay
                     onClick={onOverlayClicked}
@@ -395,7 +407,7 @@ const Tv = () => {
                     exit={{ opacity: 0 }}
                   ></Overlay>
                   <Bigtv
-                    layoutId={bigtvMatch?.params.showId + ""}
+                    layoutId={bigtvMatchNow?.params.showId + ""}
                     style={{ top: scrollY.get() + 100 }}
                   >
                     {clickedtvNow ? (
@@ -409,7 +421,9 @@ const Tv = () => {
                           }}
                         />
                         <BigTitle>{clickedtvNow.original_name}</BigTitle>
-                        <BigOverview>{clickedtvNow.overview}</BigOverview>
+                        <BigOverview>
+                          {clickedtvNow.overview || "No overview settled"}
+                        </BigOverview>
                       </>
                     ) : (
                       <>
@@ -456,7 +470,7 @@ const Tv = () => {
                             initial="normal"
                             variants={boxVars}
                             transition={{ type: "tween" }}
-                            onClick={() => onBoxClicked(tv.id)}
+                            onClick={() => onBoxClickedOn(tv.id)}
                           >
                             <Info variants={infoVars}>
                               <h4>{tv.original_name}</h4>
@@ -467,7 +481,7 @@ const Tv = () => {
                   </AnimatePresence>
                 </Slider>
                 <AnimatePresence>
-                  {bigtvMatch ? (
+                  {bigtvMatchOn ? (
                     <>
                       <Overlay
                         onClick={onOverlayClicked}
@@ -475,7 +489,7 @@ const Tv = () => {
                         exit={{ opacity: 0 }}
                       ></Overlay>
                       <Bigtv
-                        layoutId={bigtvMatch?.params.showId + ""}
+                        layoutId={bigtvMatchOn?.params.showId + ""}
                         style={{ top: scrollY.get() + 100 }}
                       >
                         {clickedtvOn ? (
@@ -489,7 +503,9 @@ const Tv = () => {
                               }}
                             />
                             <BigTitle>{clickedtvOn.original_name}</BigTitle>
-                            <BigOverview>{clickedtvOn.overview}</BigOverview>
+                            <BigOverview>
+                              {clickedtvOn.overview || "No overview settled"}
+                            </BigOverview>
                           </>
                         ) : (
                           <>
@@ -537,7 +553,7 @@ const Tv = () => {
                             initial="normal"
                             variants={boxVars}
                             transition={{ type: "tween" }}
-                            onClick={() => onBoxClicked(tv.id)}
+                            onClick={() => onBoxClickedTop(tv.id)}
                           >
                             <Info variants={infoVars}>
                               <h4>{tv.original_name}</h4>
@@ -548,7 +564,7 @@ const Tv = () => {
                   </AnimatePresence>
                 </Slider>
                 <AnimatePresence>
-                  {bigtvMatch ? (
+                  {bigtvMatchTop ? (
                     <>
                       <Overlay
                         onClick={onOverlayClicked}
@@ -556,7 +572,7 @@ const Tv = () => {
                         exit={{ opacity: 0 }}
                       ></Overlay>
                       <Bigtv
-                        layoutId={bigtvMatch?.params.showId + ""}
+                        layoutId={bigtvMatchTop?.params.showId + ""}
                         style={{ top: scrollY.get() + 100 }}
                       >
                         {clickedtvTop ? (
@@ -570,7 +586,9 @@ const Tv = () => {
                               }}
                             />
                             <BigTitle>{clickedtvTop.original_name}</BigTitle>
-                            <BigOverview>{clickedtvTop.overview}</BigOverview>
+                            <BigOverview>
+                              {clickedtvTop.overview || "No overview settled"}
+                            </BigOverview>
                           </>
                         ) : (
                           <>
@@ -618,7 +636,7 @@ const Tv = () => {
                             initial="normal"
                             variants={boxVars}
                             transition={{ type: "tween" }}
-                            onClick={() => onBoxClicked(tv.id)}
+                            onClick={() => onBoxClickedPop(tv.id)}
                           >
                             <Info variants={infoVars}>
                               <h4>{tv.original_name}</h4>
@@ -629,7 +647,7 @@ const Tv = () => {
                   </AnimatePresence>
                 </Slider>
                 <AnimatePresence>
-                  {bigtvMatch ? (
+                  {bigtvMatchPop ? (
                     <>
                       <Overlay
                         onClick={onOverlayClicked}
@@ -637,7 +655,7 @@ const Tv = () => {
                         exit={{ opacity: 0 }}
                       ></Overlay>
                       <Bigtv
-                        layoutId={bigtvMatch?.params.showId + ""}
+                        layoutId={bigtvMatchPop?.params.showId + ""}
                         style={{ top: scrollY.get() + 100 }}
                       >
                         {clickedtvPop ? (
@@ -651,7 +669,9 @@ const Tv = () => {
                               }}
                             />
                             <BigTitle>{clickedtvPop.original_name}</BigTitle>
-                            <BigOverview>{clickedtvPop.overview}</BigOverview>
+                            <BigOverview>
+                              {clickedtvPop.overview || "No overview settled"}
+                            </BigOverview>
                           </>
                         ) : (
                           <>
