@@ -6,7 +6,8 @@ import { makeImagePath } from "../utils";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { useState } from "react";
 import { off } from "process";
-import { useMatch, useNavigate, useParams } from "react-router-dom";
+import { useMatch, useNavigate } from "react-router-dom";
+import Reviews from "../components/Reviews";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -117,20 +118,23 @@ const BigMovie = styled(motion.div)`
   border-radius: 15px;
   overflow: hidden;
   z-index: 99;
+  display: flex;
+  flex-direction: column;
 `;
 const BigCover = styled.div`
   width: 100%;
   background-size: cover;
   background-position: center center;
-  height: 300px;
+  height: 500px;
 `;
 
 const BigTitle = styled.h3`
   color: ${(props) => props.theme.white.lighter};
   padding: 20px;
   font-size: 46px;
-  position: relative;
-  top: -80px;
+  position: absolute;
+  top: 200px;
+  z-index: 99;
 `;
 const Error = styled.h3`
   color: ${(props) => props.theme.white.lighter};
@@ -147,8 +151,18 @@ const ErrorMessage = styled.p`
 const BigOverview = styled.p`
   padding: 20px;
   position: relative;
-  top: -80px;
+  top: 0;
   color: ${(props) => props.theme.white.lighter};
+  height: auto;
+  margin-top: 30px;
+`;
+const BigContents = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: 0;
 `;
 
 const Overlay = styled(motion.div)`
@@ -160,7 +174,10 @@ const Overlay = styled(motion.div)`
   opacity: 0;
   z-index: 98;
 `;
-
+const ReviewTitle = styled.h1`
+  font-size: 26px;
+  padding-left: 10px;
+`;
 //Variants
 const rowVars = {
   hidden: {
@@ -224,6 +241,7 @@ const Home = () => {
     useQuery<IGetMoviesResult>(["movies", "popular"], () =>
       getMovies("en-US", "popular")
     );
+
   const [indexNP, setIndexNP] = useState(0);
   const [indexUP, setIndexUP] = useState(0);
   const [indexTR, setIndexTR] = useState(0);
@@ -420,9 +438,14 @@ const Home = () => {
                           }}
                         />
                         <BigTitle>{clickedMovieNP.title}</BigTitle>
-                        <BigOverview>
-                          {clickedMovieNP.overview || "No overview settled"}
-                        </BigOverview>
+                        <BigContents>
+                          <BigOverview>
+                            {clickedMovieNP.overview || "No overview settled"}
+                          </BigOverview>
+                          <ReviewTitle>Reviews</ReviewTitle>
+                          <hr />
+                          <Reviews id={clickedMovieNP.id} />
+                        </BigContents>
                       </>
                     ) : (
                       <>
@@ -501,9 +524,15 @@ const Home = () => {
                               }}
                             />
                             <BigTitle>{clickedMovieUP.title}</BigTitle>
-                            <BigOverview>
-                              {clickedMovieUP.overview || "No overview settled"}
-                            </BigOverview>
+                            <BigContents>
+                              <BigOverview>
+                                {clickedMovieUP.overview ||
+                                  "No overview settled"}
+                              </BigOverview>
+                              <ReviewTitle>Reviews</ReviewTitle>
+                              <hr />
+                              <Reviews id={clickedMovieUP.id} />
+                            </BigContents>
                           </>
                         ) : (
                           <>
@@ -584,9 +613,15 @@ const Home = () => {
                               }}
                             />
                             <BigTitle>{clickedMovieTR.title}</BigTitle>
-                            <BigOverview>
-                              {clickedMovieTR.overview || "No overview settled"}
-                            </BigOverview>
+                            <BigContents>
+                              <BigOverview>
+                                {clickedMovieTR.overview ||
+                                  "No overview settled"}
+                              </BigOverview>
+                              <ReviewTitle>Reviews</ReviewTitle>
+                              <hr />
+                              <Reviews id={clickedMovieTR.id} />
+                            </BigContents>
                           </>
                         ) : (
                           <>
@@ -670,9 +705,15 @@ const Home = () => {
                               }}
                             />
                             <BigTitle>{clickedMovieP.title}</BigTitle>
-                            <BigOverview>
-                              {clickedMovieP.overview || "No overview settled"}
-                            </BigOverview>
+                            <BigContents>
+                              <BigOverview>
+                                {clickedMovieP.overview ||
+                                  "No overview settled"}
+                              </BigOverview>
+                              <ReviewTitle>Reviews</ReviewTitle>
+                              <hr />
+                              <Reviews id={clickedMovieP.id} />
+                            </BigContents>
                           </>
                         ) : (
                           <>

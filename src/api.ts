@@ -40,6 +40,16 @@ export interface IGetMoviesResult {
   total_pages: number;
   total_results: number;
 }
+export interface IGetMoviesReviewResult {
+  dates: {
+    maximum: string;
+    minimum: string;
+  };
+  page: number;
+  results: IMovie[];
+  total_pages: number;
+  total_results: number;
+}
 
 export interface IGetTvsResult {
   page: number;
@@ -71,7 +81,18 @@ export const getTvs = async (lang: string, type: string, page?: number) => {
   );
   return response.data;
 };
-
+export const getMovieReviews = async (
+  movieID: number,
+  lang: string,
+  page?: number
+) => {
+  const response = await axios.get(
+    `${BASE_URL}/movie/${movieID}/reviews?language=${lang}&page=${
+      page ?? 1
+    }&api_key=${API_KEY}`
+  );
+  return response.data;
+};
 export const getSearchs = async (
   lang: string,
   keyword: string,

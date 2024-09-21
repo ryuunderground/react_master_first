@@ -6,6 +6,7 @@ import { makeImagePath } from "../utils";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
+import Reviews from "../components/Reviews";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -116,27 +117,42 @@ const Bigtv = styled(motion.div)`
   border-radius: 15px;
   overflow: hidden;
   z-index: 99;
+  display: flex;
+  flex-direction: column;
 `;
+
 const BigCover = styled.div`
   width: 100%;
   background-size: cover;
   background-position: center center;
-  height: 300px;
+  height: 500px;
 `;
 
 const BigTitle = styled.h3`
   color: ${(props) => props.theme.white.lighter};
   padding: 20px;
   font-size: 46px;
-  position: relative;
-  top: -80px;
+  position: absolute;
+  top: 200px;
+  z-index: 99;
 `;
 
 const BigOverview = styled.p`
   padding: 20px;
   position: relative;
-  top: -80px;
+  top: 0;
   color: ${(props) => props.theme.white.lighter};
+  height: auto;
+  margin-top: 30px;
+`;
+
+const BigContents = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: 0;
 `;
 
 const Overlay = styled(motion.div)`
@@ -329,23 +345,21 @@ const Tv = () => {
   const clickedtvNow =
     bigtvMatchNow?.params.showId &&
     tvNowPlaying?.results.find(
-      (tv) => String(tv.id) === bigtvMatchNow?.params.showId
+      (tv) => tv.id === +bigtvMatchNow?.params.showId!
     );
   const clickedtvOn =
     bigtvMatchOn?.params.showId &&
-    tvOncoming?.results.find(
-      (tv) => String(tv.id) === bigtvMatchOn?.params.showId
-    );
+    tvOncoming?.results.find((tv) => tv.id === +bigtvMatchOn?.params.showId!);
   const clickedtvTop =
     bigtvMatchTop?.params.showId &&
-    tvTopRated?.results.find(
-      (tv) => String(tv.id) === bigtvMatchTop?.params.showId
-    );
+    tvTopRated?.results.find((tv) => tv.id === +bigtvMatchTop?.params.showId!);
   const clickedtvPop =
     bigtvMatchPop?.params.showId &&
-    tvPopular?.results.find(
-      (tv) => String(tv.id) === bigtvMatchPop?.params.showId
-    );
+    tvPopular?.results.find((tv) => tv.id === +bigtvMatchPop?.params.showId!);
+  const ReviewTitle = styled.h1`
+    font-size: 26px;
+    padding-left: 10px;
+  `;
 
   return (
     <Wrapper>
@@ -423,9 +437,14 @@ const Tv = () => {
                           }}
                         />
                         <BigTitle>{clickedtvNow.original_name}</BigTitle>
-                        <BigOverview>
-                          {clickedtvNow.overview || "No overview settled"}
-                        </BigOverview>
+                        <BigContents>
+                          <BigOverview>
+                            {clickedtvNow.overview || "No overview settled"}
+                          </BigOverview>
+                          <ReviewTitle>Reviews</ReviewTitle>
+                          <hr />
+                          <Reviews id={clickedtvNow.id} />
+                        </BigContents>
                       </>
                     ) : (
                       <>
@@ -505,9 +524,14 @@ const Tv = () => {
                               }}
                             />
                             <BigTitle>{clickedtvOn.original_name}</BigTitle>
-                            <BigOverview>
-                              {clickedtvOn.overview || "No overview settled"}
-                            </BigOverview>
+                            <BigContents>
+                              <BigOverview>
+                                {clickedtvOn.overview || "No overview settled"}
+                              </BigOverview>
+                              <ReviewTitle>Reviews</ReviewTitle>
+                              <hr />
+                              <Reviews id={clickedtvOn.id} />
+                            </BigContents>
                           </>
                         ) : (
                           <>
@@ -588,9 +612,14 @@ const Tv = () => {
                               }}
                             />
                             <BigTitle>{clickedtvTop.original_name}</BigTitle>
-                            <BigOverview>
-                              {clickedtvTop.overview || "No overview settled"}
-                            </BigOverview>
+                            <BigContents>
+                              <BigOverview>
+                                {clickedtvTop.overview || "No overview settled"}
+                              </BigOverview>
+                              <ReviewTitle>Reviews</ReviewTitle>
+                              <hr />
+                              <Reviews id={clickedtvTop.id} />
+                            </BigContents>
                           </>
                         ) : (
                           <>
@@ -671,9 +700,14 @@ const Tv = () => {
                               }}
                             />
                             <BigTitle>{clickedtvPop.original_name}</BigTitle>
-                            <BigOverview>
-                              {clickedtvPop.overview || "No overview settled"}
-                            </BigOverview>
+                            <BigContents>
+                              <BigOverview>
+                                {clickedtvPop.overview || "No overview settled"}
+                              </BigOverview>
+                              <ReviewTitle>Reviews</ReviewTitle>
+                              <hr />
+                              <Reviews id={clickedtvPop.id} />
+                            </BigContents>
                           </>
                         ) : (
                           <>
