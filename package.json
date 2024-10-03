@@ -56,5 +56,6 @@
     "@types/react-helmet": "^6.1.11",
     "@types/react-query": "^1.2.9",
     "@types/styled-components": "^5.1.34"
-  }
+  },
+  "homepage": "https://ryuunderground.github.io/react_master_first"
 }
