@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/react_master/static/js/main.c342e44f.js",
-    "index.html": "/react_master/index.html",
-    "main.c342e44f.js.map": "/react_master/static/js/main.c342e44f.js.map"
+    "main.js": "/react_master_trello/static/js/main.b20107a3.js",
+    "index.html": "/react_master_trello/index.html",
+    "main.b20107a3.js.map": "/react_master_trello/static/js/main.b20107a3.js.map"
   },
   "entrypoints": [
-    "static/js/main.c342e44f.js"
+    "static/js/main.b20107a3.js"
   ]
 }
