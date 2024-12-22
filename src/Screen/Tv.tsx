@@ -6,7 +6,7 @@ import { makeImagePath } from "../utils";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
-import Reviews from "../components/Reviews";
+import TvGenres from "../components/TvGenres";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -19,14 +19,14 @@ const Loader = styled.div`
   align-items: center;
 `;
 
-const Banner = styled.div<{ bgPhoto: string }>`
+const Banner = styled.div<{ bgphoto: string }>`
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 60px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-    url(${(props) => props.bgPhoto});
+  background-image: linear-gradient(rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 1) 30%),
+    url(${(props) => props.bgphoto});
   background-size: cover;
 `;
 
@@ -77,11 +77,11 @@ const Row = styled(motion.div)`
   width: 100%;
 `;
 
-const Box = styled(motion.div)<{ bgPhoto: string }>`
+const Box = styled(motion.div)<{ bgphoto: string }>`
   background-color: white;
   height: 200px;
   font-size: 36px;
-  background-image: url(${(props) => props.bgPhoto});
+  background-image: url(${(props) => props.bgphoto});
   background: cover;
   background-position: center center;
   cursor: pointer;
@@ -107,9 +107,10 @@ const Info = styled(motion.div)`
 `;
 
 const Bigtv = styled(motion.div)`
-  background-color: ${(props) => props.theme.black.lighter};
+  background-color: ${(props) => props.theme.black.darker};
   position: absolute;
-  width: 40vw;
+  width: 80vw;
+  min-width: 600px;
   height: 80vh;
   left: 0;
   right: 0;
@@ -119,22 +120,26 @@ const Bigtv = styled(motion.div)`
   z-index: 99;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 `;
 
 const BigCover = styled.div`
   width: 100%;
   background-size: cover;
-  background-position: center center;
+  background-position: center top;
   height: 500px;
+  position: relative;
 `;
 
 const BigTitle = styled.h3`
   color: ${(props) => props.theme.white.lighter};
   padding: 20px;
-  font-size: 46px;
+  font-size: 100px;
+  font-weight: 800;
   position: absolute;
-  top: 200px;
+  top: 340px;
   z-index: 99;
+  white-space: nowrap;
 `;
 
 const BigOverview = styled.p`
@@ -148,11 +153,18 @@ const BigOverview = styled.p`
 
 const BigContents = styled.div`
   width: 100%;
-  height: 100%;
+  height: 50%;
   display: flex;
   flex-direction: column;
   position: relative;
+`;
+const Back = styled.div`
+  width: 5vw;
+  height: 5vw;
+  background-color: white;
+  position: absolute;
   top: 0;
+  right: 0;
 `;
 
 const Overlay = styled(motion.div)`
@@ -176,6 +188,17 @@ const ErrorMessage = styled.p`
   color: ${(props) => props.theme.white.lighter};
   padding: 20px;
   font-size: 24px;
+`;
+const ImgErr = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const NoImg = styled.span`
+  font-size: 24px;
+  color: black;
 `;
 
 //Variants
@@ -342,6 +365,9 @@ const Tv = () => {
   const onOverlayClicked = () => {
     navigate(-1);
   };
+  const goBack = () => {
+    navigate("/react_master_graduate/tv");
+  };
   const clickedtvNow =
     bigtvMatchNow?.params.showId &&
     tvNowPlaying?.results.find(
@@ -369,7 +395,7 @@ const Tv = () => {
         <>
           <Banner
             onClick={increaseIndexNP}
-            bgPhoto={makeImagePath(
+            bgphoto={makeImagePath(
               tvNowPlaying?.results[0].backdrop_path || ""
             )}
           >
@@ -383,6 +409,7 @@ const Tv = () => {
                 <ArrowBtn onClick={decreaseIndexNP}>&lt;</ArrowBtn>Airing Today
                 <ArrowBtn onClick={increaseIndexNP}>&gt;</ArrowBtn>
               </SliderTitle>
+
               <AnimatePresence onExitComplete={toggleLeaving} initial={false}>
                 <Row
                   variants={rowVars}
@@ -399,16 +426,22 @@ const Tv = () => {
                       <Box
                         layoutId={`${tv.id}NP`}
                         key={`${tv.id}NP`}
-                        bgPhoto={makeImagePath(tv.backdrop_path, "w500")}
+                        bgphoto={makeImagePath(tv.backdrop_path, "w500")}
                         whileHover="hover"
                         initial="normal"
                         variants={boxVars}
                         transition={{ type: "tween" }}
                         onClick={() => onBoxClickedNow(tv.id)}
                       >
-                        <Info variants={infoVars}>
-                          <h4>{tv.original_name}</h4>
-                        </Info>
+                        {tv.backdrop_path != null ? (
+                          <Info variants={infoVars}>
+                            <h4>{tv.original_name}</h4>
+                          </Info>
+                        ) : (
+                          <ImgErr>
+                            <NoImg>No Img on server</NoImg>
+                          </ImgErr>
+                        )}
                       </Box>
                     ))}
                 </Row>
@@ -430,20 +463,22 @@ const Tv = () => {
                       <>
                         <BigCover
                           style={{
-                            backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+                            backgroundImage: `linear-gradient(to top, #181818, transparent), url(${makeImagePath(
                               clickedtvNow.backdrop_path,
                               "w500"
                             )})`,
                           }}
-                        />
+                        >
+                          {" "}
+                          <Back onClick={goBack} />
+                        </BigCover>
                         <BigTitle>{clickedtvNow.original_name}</BigTitle>
+
                         <BigContents>
+                          <TvGenres id={clickedtvNow.id} />
                           <BigOverview>
                             {clickedtvNow.overview || "No overview settled"}
                           </BigOverview>
-                          <ReviewTitle>Reviews</ReviewTitle>
-                          <hr />
-                          <Reviews id={clickedtvNow.id} />
                         </BigContents>
                       </>
                     ) : (
@@ -486,16 +521,22 @@ const Tv = () => {
                           <Box
                             layoutId={`${tv.id}UP`}
                             key={`${tv.id}UP`}
-                            bgPhoto={makeImagePath(tv.backdrop_path, "w500")}
+                            bgphoto={makeImagePath(tv.backdrop_path, "w500")}
                             whileHover="hover"
                             initial="normal"
                             variants={boxVars}
                             transition={{ type: "tween" }}
                             onClick={() => onBoxClickedOn(tv.id)}
                           >
-                            <Info variants={infoVars}>
-                              <h4>{tv.original_name}</h4>
-                            </Info>
+                            {tv.backdrop_path != null ? (
+                              <Info variants={infoVars}>
+                                <h4>{tv.original_name}</h4>
+                              </Info>
+                            ) : (
+                              <ImgErr>
+                                <NoImg>No Img on server</NoImg>
+                              </ImgErr>
+                            )}
                           </Box>
                         ))}
                     </Row>
@@ -517,20 +558,19 @@ const Tv = () => {
                           <>
                             <BigCover
                               style={{
-                                backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+                                backgroundImage: `linear-gradient(to top, #181818, transparent), url(${makeImagePath(
                                   clickedtvOn.backdrop_path,
                                   "w500"
                                 )})`,
                               }}
                             />
                             <BigTitle>{clickedtvOn.original_name}</BigTitle>
+
                             <BigContents>
+                              <TvGenres id={clickedtvOn.id} />
                               <BigOverview>
                                 {clickedtvOn.overview || "No overview settled"}
                               </BigOverview>
-                              <ReviewTitle>Reviews</ReviewTitle>
-                              <hr />
-                              <Reviews id={clickedtvOn.id} />
                             </BigContents>
                           </>
                         ) : (
@@ -574,16 +614,22 @@ const Tv = () => {
                           <Box
                             layoutId={`${tv.id}TR`}
                             key={`${tv.id}TR`}
-                            bgPhoto={makeImagePath(tv.backdrop_path, "w500")}
+                            bgphoto={makeImagePath(tv.backdrop_path, "w500")}
                             whileHover="hover"
                             initial="normal"
                             variants={boxVars}
                             transition={{ type: "tween" }}
                             onClick={() => onBoxClickedTop(tv.id)}
                           >
-                            <Info variants={infoVars}>
-                              <h4>{tv.original_name}</h4>
-                            </Info>
+                            {tv.backdrop_path != null ? (
+                              <Info variants={infoVars}>
+                                <h4>{tv.original_name}</h4>
+                              </Info>
+                            ) : (
+                              <ImgErr>
+                                <NoImg>No Img on server</NoImg>
+                              </ImgErr>
+                            )}
                           </Box>
                         ))}
                     </Row>
@@ -605,20 +651,19 @@ const Tv = () => {
                           <>
                             <BigCover
                               style={{
-                                backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+                                backgroundImage: `linear-gradient(to top, #181818, transparent), url(${makeImagePath(
                                   clickedtvTop.backdrop_path,
                                   "w500"
                                 )})`,
                               }}
                             />
                             <BigTitle>{clickedtvTop.original_name}</BigTitle>
+
                             <BigContents>
+                              <TvGenres id={clickedtvTop.id} />
                               <BigOverview>
                                 {clickedtvTop.overview || "No overview settled"}
                               </BigOverview>
-                              <ReviewTitle>Reviews</ReviewTitle>
-                              <hr />
-                              <Reviews id={clickedtvTop.id} />
                             </BigContents>
                           </>
                         ) : (
@@ -662,16 +707,22 @@ const Tv = () => {
                           <Box
                             layoutId={`${tv.id}P`}
                             key={`${tv.id}P`}
-                            bgPhoto={makeImagePath(tv.backdrop_path, "w500")}
+                            bgphoto={makeImagePath(tv.backdrop_path, "w500")}
                             whileHover="hover"
                             initial="normal"
                             variants={boxVars}
                             transition={{ type: "tween" }}
                             onClick={() => onBoxClickedPop(tv.id)}
                           >
-                            <Info variants={infoVars}>
-                              <h4>{tv.original_name}</h4>
-                            </Info>
+                            {tv.backdrop_path != null ? (
+                              <Info variants={infoVars}>
+                                <h4>{tv.original_name}</h4>
+                              </Info>
+                            ) : (
+                              <ImgErr>
+                                <NoImg>No Img on server</NoImg>
+                              </ImgErr>
+                            )}
                           </Box>
                         ))}
                     </Row>
@@ -693,20 +744,19 @@ const Tv = () => {
                           <>
                             <BigCover
                               style={{
-                                backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+                                backgroundImage: `linear-gradient(to top, #181818, transparent), url(${makeImagePath(
                                   clickedtvPop.backdrop_path,
                                   "w500"
                                 )})`,
                               }}
                             />
                             <BigTitle>{clickedtvPop.original_name}</BigTitle>
+
                             <BigContents>
+                              <TvGenres id={clickedtvPop.id} />
                               <BigOverview>
                                 {clickedtvPop.overview || "No overview settled"}
                               </BigOverview>
-                              <ReviewTitle>Reviews</ReviewTitle>
-                              <hr />
-                              <Reviews id={clickedtvPop.id} />
                             </BigContents>
                           </>
                         ) : (

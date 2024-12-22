@@ -13,6 +13,7 @@ interface IMovie {
   poster_path: string;
   title: string;
   overview: string;
+  gernres: string;
 }
 interface ITv {
   backdrop_path: string;
@@ -91,6 +92,31 @@ export const getMovieReviews = async (
       page ?? 1
     }&api_key=${API_KEY}`
   );
+  return response.data;
+};
+export const getMovieGenres = async (
+  movieID: number,
+  lang: string,
+  page?: number
+) => {
+  const response = await axios.get(
+    `${BASE_URL}/movie/${movieID}/keywords?language=${lang}&page=${
+      page ?? 1
+    }&api_key=${API_KEY}`
+  );
+  return response.data;
+};
+export const getTvGenres = async (
+  seriesID: number,
+  lang: string,
+  page?: number
+) => {
+  const response = await axios.get(
+    `${BASE_URL}/tv/${seriesID}/keywords?language=${lang}&page=${
+      page ?? 1
+    }&api_key=${API_KEY}`
+  );
+  console.log(response);
   return response.data;
 };
 export const getSearchs = async (

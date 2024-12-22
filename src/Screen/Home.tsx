@@ -5,9 +5,9 @@ import styled from "styled-components";
 import { makeImagePath } from "../utils";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { useState } from "react";
-import { off } from "process";
 import { useMatch, useNavigate } from "react-router-dom";
 import Reviews from "../components/Reviews";
+import Genres from "../components/Genres";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -20,14 +20,14 @@ const Loader = styled.div`
   align-items: center;
 `;
 
-const Banner = styled.div<{ bgPhoto: string }>`
+const Banner = styled.div<{ bgphoto: string }>`
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 60px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-    url(${(props) => props.bgPhoto});
+  background-image: linear-gradient(rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 1) 30%),
+    url(${(props) => props.bgphoto});
   background-size: cover;
 `;
 
@@ -78,11 +78,11 @@ const Row = styled(motion.div)`
   width: 100%;
 `;
 
-const Box = styled(motion.div)<{ bgPhoto: string }>`
+const Box = styled(motion.div)<{ bgphoto: string }>`
   background-color: white;
   height: 200px;
   font-size: 36px;
-  background-image: url(${(props) => props.bgPhoto});
+  background-image: url(${(props) => props.bgphoto});
   background: cover;
   background-position: center center;
   cursor: pointer;
@@ -108,9 +108,10 @@ const Info = styled(motion.div)`
 `;
 
 const BigMovie = styled(motion.div)`
-  background-color: ${(props) => props.theme.black.lighter};
+  background-color: ${(props) => props.theme.black.darker};
   position: absolute;
-  width: 40vw;
+  width: 80vw;
+  min-width: 600px;
   height: 80vh;
   left: 0;
   right: 0;
@@ -120,22 +121,64 @@ const BigMovie = styled(motion.div)`
   z-index: 99;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 `;
 const BigCover = styled.div`
   width: 100%;
   background-size: cover;
-  background-position: center center;
+  background-position: center top;
   height: 500px;
+  position: relative;
 `;
 
 const BigTitle = styled.h3`
   color: ${(props) => props.theme.white.lighter};
   padding: 20px;
-  font-size: 46px;
+  font-size: 100px;
+  font-weight: 800;
   position: absolute;
-  top: 200px;
+  top: 340px;
   z-index: 99;
+  white-space: nowrap;
 `;
+
+const BigOverview = styled.p`
+  padding: 20px;
+  position: relative;
+  top: 0;
+  color: ${(props) => props.theme.white.lighter};
+  height: auto;
+  margin-top: 30px;
+`;
+const BigContents = styled.div`
+  width: 100%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+`;
+const Back = styled.div`
+  width: 5vw;
+  height: 5vw;
+  background-color: white;
+  position: absolute;
+  top: 0;
+  right: 0;
+`;
+
+const Overlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  z-index: 98;
+`;
+/* const ReviewButton = styled.button`
+  font-size: 24px;
+`; */
+
 const Error = styled.h3`
   color: ${(props) => props.theme.white.lighter};
   padding: 20px;
@@ -148,36 +191,7 @@ const ErrorMessage = styled.p`
   padding: 20px;
   font-size: 24px;
 `;
-const BigOverview = styled.p`
-  padding: 20px;
-  position: relative;
-  top: 0;
-  color: ${(props) => props.theme.white.lighter};
-  height: auto;
-  margin-top: 30px;
-`;
-const BigContents = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  top: 0;
-`;
 
-const Overlay = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  opacity: 0;
-  z-index: 98;
-`;
-const ReviewTitle = styled.h1`
-  font-size: 26px;
-  padding-left: 10px;
-`;
 //Variants
 const rowVars = {
   hidden: {
@@ -339,6 +353,13 @@ const Home = () => {
   const onOverlayClicked = () => {
     navigate(-1);
   };
+  const goBack = () => {
+    navigate("/react_master_graduate");
+  };
+  /*   const goToReview = (movieId: number) => {
+    navigate(`/react_master_graduate/moviereview/${movieId}`);
+  }; */
+
   const clickedMovieNP =
     bigMovieMatchNP?.params.movieId &&
     movieNowPlaying?.results.find(
@@ -369,7 +390,7 @@ const Home = () => {
       ) : (
         <>
           <Banner
-            bgPhoto={makeImagePath(
+            bgphoto={makeImagePath(
               movieNowPlaying?.results[0].backdrop_path || ""
             )}
           >
@@ -400,7 +421,7 @@ const Home = () => {
                       <Box
                         layoutId={`${movie.id}NP`}
                         key={`${movie.id}NP`}
-                        bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
+                        bgphoto={makeImagePath(movie.backdrop_path, "w500")}
                         whileHover="hover"
                         initial="normal"
                         variants={boxVars}
@@ -431,21 +452,27 @@ const Home = () => {
                       <>
                         <BigCover
                           style={{
-                            backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+                            backgroundImage: `linear-gradient(to top, #181818, transparent), url(${makeImagePath(
                               clickedMovieNP.backdrop_path,
                               "w500"
                             )})`,
                           }}
-                        />
+                        >
+                          <Back onClick={goBack} />
+                        </BigCover>
                         <BigTitle>{clickedMovieNP.title}</BigTitle>
                         <BigContents>
+                          <Genres id={clickedMovieNP.id} />
                           <BigOverview>
                             {clickedMovieNP.overview || "No overview settled"}
                           </BigOverview>
-                          <ReviewTitle>Reviews</ReviewTitle>
-                          <hr />
-                          <Reviews id={clickedMovieNP.id} />
                         </BigContents>
+
+                        {/*  <ReviewButton
+                          onClick={() => goToReview(clickedMovieNP.id)}
+                        >
+                          Review
+                        </ReviewButton> */}
                       </>
                     ) : (
                       <>
@@ -486,7 +513,7 @@ const Home = () => {
                           <Box
                             layoutId={`${movie.id}UP`}
                             key={`${movie.id}UP`}
-                            bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
+                            bgphoto={makeImagePath(movie.backdrop_path, "w500")}
                             whileHover="hover"
                             initial="normal"
                             variants={boxVars}
@@ -517,7 +544,7 @@ const Home = () => {
                           <>
                             <BigCover
                               style={{
-                                backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+                                backgroundImage: `linear-gradient(to top, #181818, transparent), url(${makeImagePath(
                                   clickedMovieUP.backdrop_path,
                                   "w500"
                                 )})`,
@@ -525,13 +552,11 @@ const Home = () => {
                             />
                             <BigTitle>{clickedMovieUP.title}</BigTitle>
                             <BigContents>
+                              <Genres id={clickedMovieUP.id} />
                               <BigOverview>
                                 {clickedMovieUP.overview ||
                                   "No overview settled"}
                               </BigOverview>
-                              <ReviewTitle>Reviews</ReviewTitle>
-                              <hr />
-                              <Reviews id={clickedMovieUP.id} />
                             </BigContents>
                           </>
                         ) : (
@@ -575,7 +600,7 @@ const Home = () => {
                           <Box
                             layoutId={`${movie.id}TR`}
                             key={`${movie.id}TR`}
-                            bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
+                            bgphoto={makeImagePath(movie.backdrop_path, "w500")}
                             whileHover="hover"
                             initial="normal"
                             variants={boxVars}
@@ -606,7 +631,7 @@ const Home = () => {
                           <>
                             <BigCover
                               style={{
-                                backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+                                backgroundImage: `linear-gradient(to top, #181818, transparent), url(${makeImagePath(
                                   clickedMovieTR.backdrop_path,
                                   "w500"
                                 )})`,
@@ -614,13 +639,11 @@ const Home = () => {
                             />
                             <BigTitle>{clickedMovieTR.title}</BigTitle>
                             <BigContents>
+                              <Genres id={clickedMovieTR.id} />
                               <BigOverview>
                                 {clickedMovieTR.overview ||
                                   "No overview settled"}
                               </BigOverview>
-                              <ReviewTitle>Reviews</ReviewTitle>
-                              <hr />
-                              <Reviews id={clickedMovieTR.id} />
                             </BigContents>
                           </>
                         ) : (
@@ -667,7 +690,7 @@ const Home = () => {
                           <Box
                             layoutId={`${movie.id}P`}
                             key={`${movie.id}P`}
-                            bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
+                            bgphoto={makeImagePath(movie.backdrop_path, "w500")}
                             whileHover="hover"
                             initial="normal"
                             variants={boxVars}
@@ -698,7 +721,7 @@ const Home = () => {
                           <>
                             <BigCover
                               style={{
-                                backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+                                backgroundImage: `linear-gradient(to top, #181818, transparent), url(${makeImagePath(
                                   clickedMovieP.backdrop_path,
                                   "w500"
                                 )})`,
@@ -706,13 +729,11 @@ const Home = () => {
                             />
                             <BigTitle>{clickedMovieP.title}</BigTitle>
                             <BigContents>
+                              <Genres id={clickedMovieP.id} />
                               <BigOverview>
                                 {clickedMovieP.overview ||
                                   "No overview settled"}
                               </BigOverview>
-                              <ReviewTitle>Reviews</ReviewTitle>
-                              <hr />
-                              <Reviews id={clickedMovieP.id} />
                             </BigContents>
                           </>
                         ) : (

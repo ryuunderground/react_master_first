@@ -5,6 +5,8 @@ import ErrorComponenet from "./components/ErrorComponent";
 import NotFound from "./components/NotFound";
 import Tv from "./Screen/Tv";
 import Search from "./Screen/Search";
+import Reviews from "./components/Reviews";
+import ReviewScreen from "./Screen/ReviewScreen";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +38,7 @@ const router = createBrowserRouter([
         element: <Home />,
         errorElement: <ErrorComponenet />,
       },
+
       {
         path: "tv/",
         element: <Tv />,

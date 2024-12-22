@@ -58,8 +58,8 @@ const NoReview = styled.div`
 `;
 const NoReviewMessage = styled.h1``;
 const Reviews = ({ id }: IReviewProps) => {
-  const { data: movieNowPlayingReviews, isLoading: movieNowReviewLoading } =
-    useQuery<IReviews>(["reviews", "nowPlayingMovie"], () =>
+  const { data: movieReviews, isLoading: movieReviewLoading } =
+    useQuery<IReviews>(["reviews", "MovieReviews"], () =>
       getMovieReviews(id, "en-US")
     );
   const Fhalf = (nickname: string) => {
@@ -71,9 +71,9 @@ const Reviews = ({ id }: IReviewProps) => {
   };
   return (
     <Review>
-      {movieNowPlayingReviews?.results.length != 0 ? (
-        movieNowPlayingReviews?.results.map((review) => (
-          <Each>
+      {movieReviews?.results.length != 0 ? (
+        movieReviews?.results.map((review) => (
+          <Each key={review.updated_at}>
             <Header>
               <Reviewr>author: {Fhalf(review.author)}</Reviewr>
               <Update>updated at: {review.updated_at.slice(0, 10)}</Update>

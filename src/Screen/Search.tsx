@@ -53,11 +53,11 @@ const Row = styled(motion.div)`
   width: 100%;
 `;
 
-const Box = styled(motion.div)<{ bgPhoto: string | null }>`
+const Box = styled(motion.div)<{ bgphoto: string | null }>`
   background-color: white;
   height: 200px;
   font-size: 36px;
-  background-image: url(${(props) => props.bgPhoto});
+  background-image: url(${(props) => props.bgphoto});
   background: cover;
   background-position: center center;
   cursor: pointer;
@@ -85,19 +85,28 @@ const Info = styled(motion.div)`
 const Bigtv = styled(motion.div)`
   background-color: ${(props) => props.theme.black.lighter};
   position: absolute;
-  width: 40vw;
+  width: 80vw;
+  min-width: 600px;
   height: 80vh;
   left: 0;
   right: 0;
   margin: 0 auto;
   border-radius: 15px;
   overflow: hidden;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;
 const BigCover = styled.div`
   width: 100%;
   background-size: cover;
-  background-position: center center;
-  height: 300px;
+  background-position: center top;
+  height: 500px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 const NoImg = styled.span`
   font-size: 36px;
@@ -108,18 +117,30 @@ const NoImg = styled.span`
 const BigTitle = styled.h3`
   color: ${(props) => props.theme.white.lighter};
   padding: 20px;
-  font-size: 46px;
-  position: relative;
-  top: -80px;
+  font-size: 100px;
+  font-weight: 800;
+  position: absolute;
+  top: 340px;
+  z-index: 99;
+  white-space: nowrap;
 `;
 
 const BigOverview = styled.p`
   padding: 20px;
   position: relative;
-  top: -80px;
+  top: 0;
   color: ${(props) => props.theme.white.lighter};
+  height: auto;
+  margin-top: 30px;
 `;
-
+const Back = styled.div`
+  width: 5vw;
+  height: 5vw;
+  background-color: white;
+  position: absolute;
+  top: 0;
+  right: 0;
+`;
 const Overlay = styled(motion.div)`
   position: fixed;
   top: 0;
@@ -243,7 +264,7 @@ const Search = () => {
                     <Box
                       layoutId={search.id + ""}
                       key={search.id}
-                      bgPhoto={
+                      bgphoto={
                         search.backdrop_path
                           ? makeImagePath(search.backdrop_path, "w500")
                           : makeImagePath(search.poster_path, "w500")
@@ -279,7 +300,7 @@ const Search = () => {
                       {clickedSearch.backdrop_path ? (
                         <BigCover
                           style={{
-                            backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+                            backgroundImage: `linear-gradient(to top, #181818, transparent), url(${makeImagePath(
                               clickedSearch.backdrop_path,
                               "w500"
                             )})`,
@@ -288,7 +309,7 @@ const Search = () => {
                       ) : clickedSearch.poster_path ? (
                         <BigCover
                           style={{
-                            backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+                            backgroundImage: `linear-gradient(to top, #181818, transparent), url(${makeImagePath(
                               clickedSearch.poster_path,
                               "w500"
                             )})`,
@@ -297,12 +318,12 @@ const Search = () => {
                       ) : (
                         <BigCover
                           style={{
-                            backgroundImage: `linear-gradient(to top, black, transparent)
+                            backgroundImage: `linear-gradient(to top, #181818, transparent)
                               "w500"
                             )})`,
                           }}
                         >
-                          <NoImg>No Image Contents</NoImg>
+                          <NoImg>No Image on Server</NoImg>
                         </BigCover>
                       )}
                       <BigTitle>
