@@ -25,14 +25,14 @@ const Banner = styled.div<{ bgphoto: string }>`
   flex-direction: column;
   justify-content: center;
   padding: 60px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 1) 30%),
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.bgphoto});
   background-size: cover;
 `;
 
 const Title = styled.h2`
-  font-size: 48px;
-  margin-bottom: 10px;
+  font-size: 100px;
+  margin-top: 225px;
 `;
 const ArrowBtn = styled.button`
   height: 26px;

@@ -93,8 +93,8 @@ const Input = styled(motion.input)`
   transform-origin: right center;
   position: absolute;
   right: 0px;
-  padding: 5px 10px;
-  padding-left: 10px;
+  min-width: 260px;
+  padding: 5px 30px;
   z-index: -1;
   color: white;
   font-size: 16px;
@@ -192,7 +192,7 @@ const Header = () => {
           <motion.svg
             onClick={toggleSearch}
             transition={{ ease: "linear" }}
-            animate={{ x: isSearchOpen ? -180 : 0 }}
+            animate={{ x: isSearchOpen ? -230 : 0 }}
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/motion.svg"
@@ -207,6 +207,7 @@ const Header = () => {
           <Input
             {...register("keyword", { required: true, minLength: 2 })}
             animate={inputAnimation}
+            initial={{ scaleX: 0 }}
             transition={{ ease: "linear" }}
             placeholder="Search for movie or tv show"
           />

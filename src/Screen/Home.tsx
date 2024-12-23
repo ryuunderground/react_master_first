@@ -26,14 +26,14 @@ const Banner = styled.div<{ bgphoto: string }>`
   flex-direction: column;
   justify-content: center;
   padding: 60px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 1) 30%),
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.bgphoto});
   background-size: cover;
 `;
 
 const Title = styled.h2`
-  font-size: 48px;
-  margin-bottom: 10px;
+  font-size: 100px;
+  margin-top: 225px;
 `;
 const Overview = styled.p`
   font-size: 20px;
@@ -72,7 +72,7 @@ const Slider = styled.div`
 const Row = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 5px;
+  gap: 10px;
   margin-bottom: 5px;
   position: absolute;
   width: 100%;
@@ -81,10 +81,14 @@ const Row = styled(motion.div)`
 const Box = styled(motion.div)<{ bgphoto: string }>`
   background-color: white;
   height: 200px;
+  width: 100%;
   font-size: 36px;
   background-image: url(${(props) => props.bgphoto});
-  background: cover;
+  background-size: cover;
   background-position: center center;
+  position: relative;
+  min-width: 200px;
+
   cursor: pointer;
   &:first-child {
     transform-origin: center left;
@@ -101,9 +105,12 @@ const Info = styled(motion.div)`
   position: absolute;
   width: 100%;
   bottom: 0;
+  width: 100%;
+
   h4 {
     text-align: center;
     font-size: 12px;
+    width: 100%;
   }
 `;
 
@@ -207,6 +214,7 @@ const rowVars = {
 const boxVars = {
   normal: {
     scale: 1,
+    zIndex: 60,
   },
   hover: {
     scale: 1.3,
@@ -216,6 +224,7 @@ const boxVars = {
       type: "tween",
       duration: 0.3,
     },
+    zIndex: 98,
   },
 };
 const infoVars = {
