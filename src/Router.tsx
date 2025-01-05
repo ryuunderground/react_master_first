@@ -8,79 +8,84 @@ import Search from "./Screen/Search";
 import Reviews from "./components/Reviews";
 import ReviewScreen from "./Screen/ReviewScreen";
 
-const router = createBrowserRouter([
-  {
-    path: "/react_master_graduate/",
-    element: <App />,
-    children: [
-      {
-        path: "",
-        element: <Home />,
-        errorElement: <ErrorComponenet />,
-      },
-      {
-        path: "moviesNP/:movieId",
-        element: <Home />,
-        errorElement: <ErrorComponenet />,
-      },
-      {
-        path: "moviesUP/:movieId",
-        element: <Home />,
-        errorElement: <ErrorComponenet />,
-      },
-      {
-        path: "moviesTR/:movieId",
-        element: <Home />,
-        errorElement: <ErrorComponenet />,
-      },
-      {
-        path: "moviesP/:movieId",
-        element: <Home />,
-        errorElement: <ErrorComponenet />,
-      },
+const router = createBrowserRouter(
+  [
+    {
+      path: "/react_master_graduate/",
+      element: <App />,
+      children: [
+        {
+          path: "",
+          element: <Home />,
+          errorElement: <ErrorComponenet />,
+        },
+        {
+          path: "moviesNP/:movieId",
+          element: <Home />,
+          errorElement: <ErrorComponenet />,
+        },
+        {
+          path: "moviesUP/:movieId",
+          element: <Home />,
+          errorElement: <ErrorComponenet />,
+        },
+        {
+          path: "moviesTR/:movieId",
+          element: <Home />,
+          errorElement: <ErrorComponenet />,
+        },
+        {
+          path: "moviesP/:movieId",
+          element: <Home />,
+          errorElement: <ErrorComponenet />,
+        },
 
-      {
-        path: "tv/",
-        element: <Tv />,
-        errorElement: <ErrorComponenet />,
-        children: [
-          {
-            path: "Now/:showId",
-            element: <Tv />,
-            errorElement: <ErrorComponenet />,
-          },
-          {
-            path: "On/:showId",
-            element: <Tv />,
-            errorElement: <ErrorComponenet />,
-          },
-          {
-            path: "Top/:showId",
-            element: <Tv />,
-            errorElement: <ErrorComponenet />,
-          },
-          {
-            path: "Pop/:showId",
-            element: <Tv />,
-            errorElement: <ErrorComponenet />,
-          },
-        ],
-      },
-      {
-        path: "search/",
-        element: <Search />,
-        errorElement: <ErrorComponenet />,
-        children: [
-          {
-            path: ":showId",
-            element: <Tv />,
-            errorElement: <ErrorComponenet />,
-          },
-        ],
-      },
-    ],
-    errorElement: <NotFound />,
-  },
-]);
+        {
+          path: "tv/",
+          element: <Tv />,
+          errorElement: <ErrorComponenet />,
+          children: [
+            {
+              path: "Now/:showId",
+              element: <Tv />,
+              errorElement: <ErrorComponenet />,
+            },
+            {
+              path: "On/:showId",
+              element: <Tv />,
+              errorElement: <ErrorComponenet />,
+            },
+            {
+              path: "Top/:showId",
+              element: <Tv />,
+              errorElement: <ErrorComponenet />,
+            },
+            {
+              path: "Pop/:showId",
+              element: <Tv />,
+              errorElement: <ErrorComponenet />,
+            },
+          ],
+        },
+        {
+          path: "search/",
+          element: <Search />,
+          errorElement: <ErrorComponenet />,
+          children: [
+            {
+              path: ":showId",
+              element: <Tv />,
+              errorElement: <ErrorComponenet />,
+            },
+          ],
+        },
+      ],
+      errorElement: <NotFound />,
+    },
+  ],
+  {
+    basename: process.env.PUBLIC_URL,
+  }
+);
 
 export default router;
