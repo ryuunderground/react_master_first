@@ -164,14 +164,6 @@ const BigContents = styled.div`
   flex-direction: column;
   position: relative;
 `;
-const Back = styled.div`
-  width: 5vw;
-  height: 5vw;
-  background-color: white;
-  position: absolute;
-  top: 0;
-  right: 0;
-`;
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -362,9 +354,7 @@ const Home = () => {
   const onOverlayClicked = () => {
     navigate(-1);
   };
-  const goBack = () => {
-    navigate("/react_master_graduate");
-  };
+
   /*   const goToReview = (movieId: number) => {
     navigate(`/react_master_graduate/moviereview/${movieId}`);
   }; */
@@ -466,9 +456,7 @@ const Home = () => {
                               "w500"
                             )})`,
                           }}
-                        >
-                          <Back onClick={goBack} />
-                        </BigCover>
+                        />
                         <BigTitle>{clickedMovieNP.title}</BigTitle>
                         <BigContents>
                           <Genres id={clickedMovieNP.id} />
