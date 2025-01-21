@@ -144,7 +144,7 @@ const BigTitle = styled.h3`
   font-size: 100px;
   font-weight: 800;
   position: absolute;
-  top: 340px;
+  top: 320px;
   z-index: 99;
   white-space: nowrap;
 `;
@@ -167,10 +167,30 @@ const BigContents = styled.div`
 const Back = styled.div`
   width: 5vw;
   height: 5vw;
-  background-color: white;
+  background-color: transparent;
   position: absolute;
   top: 0;
   right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 16px;
+  &:hover {
+    transform: scale(1.2);
+  }
+  span {
+    pointer-events: none;
+    position: absolute;
+    color: black;
+    font-size: 64px;
+    z-index: 84;
+
+    &:last-child {
+      color: white;
+      font-weight: 600;
+      z-index: 83;
+    }
+  }
 `;
 
 const Overlay = styled(motion.div)`
@@ -467,7 +487,10 @@ const Home = () => {
                             )})`,
                           }}
                         >
-                          <Back onClick={goBack} />
+                          <Back onClick={goBack}>
+                            <span>X</span>
+                            <span>X</span>
+                          </Back>
                         </BigCover>
                         <BigTitle>{clickedMovieNP.title}</BigTitle>
                         <BigContents>
@@ -558,7 +581,12 @@ const Home = () => {
                                   "w500"
                                 )})`,
                               }}
-                            />
+                            >
+                              <Back onClick={goBack}>
+                                <span>X</span>
+                                <span>X</span>
+                              </Back>
+                            </BigCover>
                             <BigTitle>{clickedMovieUP.title}</BigTitle>
                             <BigContents>
                               <Genres id={clickedMovieUP.id} />
@@ -645,7 +673,12 @@ const Home = () => {
                                   "w500"
                                 )})`,
                               }}
-                            />
+                            >
+                              <Back onClick={goBack}>
+                                <span>X</span>
+                                <span>X</span>
+                              </Back>
+                            </BigCover>
                             <BigTitle>{clickedMovieTR.title}</BigTitle>
                             <BigContents>
                               <Genres id={clickedMovieTR.id} />
@@ -735,7 +768,12 @@ const Home = () => {
                                   "w500"
                                 )})`,
                               }}
-                            />
+                            >
+                              <Back onClick={goBack}>
+                                <span>X</span>
+                                <span>X</span>
+                              </Back>
+                            </BigCover>
                             <BigTitle>{clickedMovieP.title}</BigTitle>
                             <BigContents>
                               <Genres id={clickedMovieP.id} />

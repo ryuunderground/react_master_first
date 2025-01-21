@@ -120,7 +120,7 @@ const BigTitle = styled.h3`
   font-size: 100px;
   font-weight: 800;
   position: absolute;
-  top: 340px;
+  top: 320px;
   z-index: 99;
   white-space: nowrap;
 `;
@@ -136,10 +136,30 @@ const BigOverview = styled.p`
 const Back = styled.div`
   width: 5vw;
   height: 5vw;
-  background-color: white;
+  background-color: transparent;
   position: absolute;
   top: 0;
   right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 16px;
+  &:hover {
+    transform: scale(1.2);
+  }
+  span {
+    pointer-events: none;
+    position: absolute;
+    color: black;
+    font-size: 64px;
+    z-index: 84;
+
+    &:last-child {
+      color: white;
+      font-weight: 600;
+      z-index: 83;
+    }
+  }
 `;
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -231,6 +251,9 @@ const Search = () => {
   const onOverlayClicked = () => {
     navigate(-1);
   };
+  const goBack = () => {
+    navigate(-1);
+  };
   const clickedSearch =
     bigSearchMatch?.params.searchId &&
     searchResult?.results.find(
@@ -305,7 +328,12 @@ const Search = () => {
                               "w500"
                             )})`,
                           }}
-                        />
+                        >
+                          <Back onClick={goBack}>
+                            <span>X</span>
+                            <span>X</span>
+                          </Back>
+                        </BigCover>
                       ) : clickedSearch.poster_path ? (
                         <BigCover
                           style={{
@@ -314,7 +342,12 @@ const Search = () => {
                               "w500"
                             )})`,
                           }}
-                        />
+                        >
+                          <Back onClick={goBack}>
+                            <span>X</span>
+                            <span>X</span>
+                          </Back>
+                        </BigCover>
                       ) : (
                         <BigCover
                           style={{
@@ -324,6 +357,10 @@ const Search = () => {
                           }}
                         >
                           <NoImg>No Image on Server</NoImg>
+                          <Back onClick={goBack}>
+                            <span>X</span>
+                            <span>X</span>
+                          </Back>
                         </BigCover>
                       )}
                       <BigTitle>
