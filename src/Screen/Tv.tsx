@@ -161,12 +161,10 @@ const BigContents = styled.div`
 const Back = styled.div`
   width: 5vw;
   height: 5vw;
-  background-color: transparent;
+  background-color: white;
   position: absolute;
   top: 0;
   right: 0;
-  font-size: 5vw;
-  color: ${(props) => props.theme.black.lighter};
 `;
 
 const Overlay = styled(motion.div)`
@@ -472,7 +470,7 @@ const Tv = () => {
                           }}
                         >
                           {" "}
-                          <Back onClick={goBack}>x</Back>
+                          <Back onClick={goBack} />
                         </BigCover>
                         <BigTitle>{clickedtvNow.original_name}</BigTitle>
 
@@ -565,9 +563,7 @@ const Tv = () => {
                                   "w500"
                                 )})`,
                               }}
-                            >
-                              <Back onClick={goBack}>x</Back>
-                            </BigCover>
+                            />
                             <BigTitle>{clickedtvOn.original_name}</BigTitle>
 
                             <BigContents>
@@ -660,9 +656,7 @@ const Tv = () => {
                                   "w500"
                                 )})`,
                               }}
-                            >
-                              <Back onClick={goBack}>x</Back>
-                            </BigCover>
+                            />
                             <BigTitle>{clickedtvTop.original_name}</BigTitle>
 
                             <BigContents>
@@ -755,9 +749,7 @@ const Tv = () => {
                                   "w500"
                                 )})`,
                               }}
-                            >
-                              <Back onClick={goBack}>x</Back>
-                            </BigCover>
+                            />
                             <BigTitle>{clickedtvPop.original_name}</BigTitle>
 
                             <BigContents>

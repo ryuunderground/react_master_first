@@ -29,7 +29,6 @@ interface ISearch {
   poster_path: string;
   overview: string;
   title: string;
-  media_type: string;
 }
 
 export interface IGetMoviesResult {
@@ -131,13 +130,4 @@ export const getSearchs = async (
     }&query=${keyword}&include_adult=true`
   );
   return response.data;
-};
-
-export const getMovieSearchs = async (list: Array<ISearch>) => {
-  const movieSearch = list.filter((search) => search.media_type === "movie");
-  return movieSearch;
-};
-export const getTvSearchs = async (list: Array<ISearch>) => {
-  const tvSearch = list.filter((search) => search.media_type === "tv");
-  return tvSearch;
 };

@@ -39,13 +39,6 @@ const ArrowBtn = styled.button`
   border-radius: 50%;
   color: white;
 `;
-const Sliders = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: auto;
-  gap: 200px;
-`;
 const Slider = styled.div`
   top: -100px;
   height: 100%;
@@ -140,7 +133,14 @@ const BigOverview = styled.p`
   height: auto;
   margin-top: 30px;
 `;
-
+const Back = styled.div`
+  width: 5vw;
+  height: 5vw;
+  background-color: white;
+  position: absolute;
+  top: 0;
+  right: 0;
+`;
 const Overlay = styled(motion.div)`
   position: fixed;
   top: 0;
@@ -174,7 +174,6 @@ const boxVars = {
       type: "tween",
       duration: 0.3,
     },
-    zIndex: 98,
   },
 };
 const infoVars = {
@@ -193,6 +192,7 @@ const infoVars = {
 const Search = () => {
   const location = useLocation();
   const keyword = new URLSearchParams(location.search).get("keyword");
+  console.log(keyword);
   const navigate = useNavigate();
   const bigSearchMatch = useMatch("react_master_graduate/search/:searchId");
   const { scrollY } = useScroll();
@@ -200,64 +200,30 @@ const Search = () => {
     useQuery<IGetSearchResult>(["search", "search_result"], () =>
       getSearchs("en-US", keyword || "error")
     );
-  const movieSearch = searchResult?.results.filter(
-    (search) => search.media_type === "movie"
-  );
-  const tvSearch = searchResult?.results.filter(
-    (search) => search.media_type === "tv"
-  );
-  console.log(movieSearch);
-  console.log(tvSearch);
-  const [indexMovie, setIndexMovie] = useState(0);
-  const [indexTv, setIndexTv] = useState(0);
-  const [isLeavingMovie, setIsLeavingMovie] = useState(false);
-  const [isLeavingTv, setIsLeavingTv] = useState(false);
 
-  const increaseIndexMovie = () => {
-    if (movieSearch) {
-      if (isLeavingMovie) return;
-      toggleLeavingMovie();
-      const totalMovieSearchs = movieSearch.length - 1;
-      const maxIndexMovie = Math.floor(totalMovieSearchs / offset) - 1;
-      setIndexMovie((prev) => (prev === maxIndexMovie ? 0 : prev + 1));
+  const [index, setIndex] = useState(0);
+  const [isLeaving, setIsLeaving] = useState(false);
+  const increaseIndex = () => {
+    if (searchResult) {
+      if (isLeaving) return;
+      toggleLeaving();
+      const totalSearchs = searchResult.results.length - 1;
+      const maxIndex = Math.floor(totalSearchs / offset) - 1;
+      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
-  const decreaseIndexMovie = () => {
-    if (movieSearch) {
-      if (isLeavingMovie) return;
-      toggleLeavingMovie();
-      const totalMovieSearchs = movieSearch.length - 1;
-      const maxIndexMovie = Math.floor(totalMovieSearchs / offset) - 1;
-      setIndexMovie((prev) => (prev === 0 ? maxIndexMovie : prev - 1));
+  const decreaseIndex = () => {
+    if (searchResult) {
+      if (isLeaving) return;
+      toggleLeaving();
+      const totalSearchs = searchResult.results.length - 1;
+      const maxIndex = Math.floor(totalSearchs / offset) - 1;
+      setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
-  const increaseIndexTv = () => {
-    if (tvSearch) {
-      if (isLeavingTv) return;
-      toggleLeavingTv();
-      const totalTvSearchs = tvSearch.length - 1;
-      const maxIndexTv = Math.floor(totalTvSearchs / offset);
-      setIndexTv((prev) => (prev === maxIndexTv ? 0 : prev + 1));
-    }
+  const toggleLeaving = () => {
+    setIsLeaving((prev) => !prev);
   };
-  const decreaseIndexTv = () => {
-    if (tvSearch) {
-      if (isLeavingTv) return;
-      toggleLeavingTv();
-      const totalTvSearchs = tvSearch.length - 1;
-      const maxIndexTv = Math.floor(totalTvSearchs / offset) - 1;
-      console.log(maxIndexTv);
-      setIndexTv((prev) => (prev === 0 ? maxIndexTv : prev - 1));
-    }
-  };
-
-  const toggleLeavingMovie = () => {
-    setIsLeavingMovie((prev) => !prev);
-  };
-  const toggleLeavingTv = () => {
-    setIsLeavingTv((prev) => !prev);
-  };
-
   const offset = 6;
   const onBoxClicked = (searchId: number) => {
     navigate(`/react_master_graduate/search/${searchId}`);
@@ -265,219 +231,111 @@ const Search = () => {
   const onOverlayClicked = () => {
     navigate(-1);
   };
-
   const clickedSearch =
     bigSearchMatch?.params.searchId &&
     searchResult?.results.find(
       (search) => String(search.id) === bigSearchMatch?.params.searchId
     );
-
   return (
     <Wrapper>
       {searching ? (
         <Loader>Searching...</Loader>
       ) : (
         <>
-          <Sliders>
-            <Slider>
-              {movieSearch && movieSearch.length > 6 ? (
-                <SliderTitle>
-                  <ArrowBtn onClick={decreaseIndexMovie}>&lt;</ArrowBtn>
-                  Movie : Search Result for '{keyword}'
-                  <ArrowBtn onClick={increaseIndexMovie}>&gt;</ArrowBtn>
-                </SliderTitle>
-              ) : (
-                <SliderTitle>Movie : Search Result for '{keyword}'</SliderTitle>
-              )}
-              <AnimatePresence
-                onExitComplete={toggleLeavingMovie}
-                initial={false}
+          <Slider>
+            <SliderTitle>
+              <ArrowBtn onClick={decreaseIndex}>&lt;</ArrowBtn>
+              Search Result for '{keyword}'
+              <ArrowBtn onClick={increaseIndex}>&gt;</ArrowBtn>
+            </SliderTitle>
+            <AnimatePresence onExitComplete={toggleLeaving} initial={false}>
+              <Row
+                variants={rowVars}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={{ type: "tween", duration: 1 }}
+                key={index}
               >
-                <Row
-                  variants={rowVars}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  transition={{ type: "tween", duration: 1 }}
-                  key={indexMovie}
+                {searchResult?.results
+                  .slice(1)
+                  .slice(offset * index, offset * index + offset)
+                  .map((search) => (
+                    <Box
+                      layoutId={search.id + ""}
+                      key={search.id}
+                      bgphoto={
+                        search.backdrop_path
+                          ? makeImagePath(search.backdrop_path, "w500")
+                          : makeImagePath(search.poster_path, "w500")
+                      }
+                      whileHover="hover"
+                      initial="normal"
+                      variants={boxVars}
+                      transition={{ type: "tween" }}
+                      onClick={() => onBoxClicked(search.id)}
+                    >
+                      <Info variants={infoVars}>
+                        <h4>{search.name || search.title || keyword}</h4>
+                      </Info>
+                    </Box>
+                  ))}
+              </Row>
+            </AnimatePresence>
+          </Slider>
+          <AnimatePresence>
+            {bigSearchMatch ? (
+              <>
+                <Overlay
+                  onClick={onOverlayClicked}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                ></Overlay>
+                <Bigtv
+                  layoutId={bigSearchMatch?.params.searchId + ""}
+                  style={{ top: scrollY.get() + 100 }}
                 >
-                  {movieSearch
-                    ?.slice(offset * indexMovie, offset * indexMovie + offset)
-                    .map((search) => (
-                      <Box
-                        layoutId={search.id + ""}
-                        key={search.id}
-                        bgphoto={
-                          search.backdrop_path
-                            ? makeImagePath(search.backdrop_path, "w500")
-                            : makeImagePath(search.poster_path, "w500")
-                        }
-                        whileHover="hover"
-                        initial="normal"
-                        variants={boxVars}
-                        transition={{ type: "tween" }}
-                        onClick={() => onBoxClicked(search.id)}
-                      >
-                        <Info variants={infoVars}>
-                          <h4>{search.name || search.title || keyword}</h4>
-                        </Info>
-                      </Box>
-                    ))}
-                </Row>
-              </AnimatePresence>
-            </Slider>
-            <AnimatePresence>
-              {bigSearchMatch ? (
-                <>
-                  <Overlay
-                    onClick={onOverlayClicked}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  ></Overlay>
-                  <Bigtv
-                    layoutId={bigSearchMatch?.params.searchId + ""}
-                    style={{ top: scrollY.get() + 100 }}
-                  >
-                    {clickedSearch && (
-                      <>
-                        {clickedSearch.backdrop_path ? (
-                          <BigCover
-                            style={{
-                              backgroundImage: `linear-gradient(to top, #181818, transparent), url(${makeImagePath(
-                                clickedSearch.backdrop_path,
-                                "w500"
-                              )})`,
-                            }}
-                          />
-                        ) : clickedSearch.poster_path ? (
-                          <BigCover
-                            style={{
-                              backgroundImage: `linear-gradient(to top, #181818, transparent), url(${makeImagePath(
-                                clickedSearch.poster_path,
-                                "w500"
-                              )})`,
-                            }}
-                          />
-                        ) : (
-                          <BigCover
-                            style={{
-                              backgroundImage: `linear-gradient(to top, #181818, transparent)
+                  {clickedSearch && (
+                    <>
+                      {clickedSearch.backdrop_path ? (
+                        <BigCover
+                          style={{
+                            backgroundImage: `linear-gradient(to top, #181818, transparent), url(${makeImagePath(
+                              clickedSearch.backdrop_path,
                               "w500"
                             )})`,
-                            }}
-                          >
-                            <NoImg>No Image on Server</NoImg>
-                          </BigCover>
-                        )}
-                        <BigTitle>
-                          {clickedSearch.name || clickedSearch.title || keyword}
-                        </BigTitle>
-                        <BigOverview>{clickedSearch.overview}</BigOverview>
-                      </>
-                    )}
-                  </Bigtv>
-                </>
-              ) : null}
-            </AnimatePresence>
-            {/* Tv Search */}
-            <Slider>
-              {tvSearch && tvSearch.length > 6 ? (
-                <SliderTitle>
-                  <ArrowBtn onClick={decreaseIndexTv}>&lt;</ArrowBtn>
-                  Tv : Search Result for '{keyword}'
-                  <ArrowBtn onClick={increaseIndexTv}>&gt;</ArrowBtn>
-                </SliderTitle>
-              ) : (
-                <SliderTitle>Tv : Search Result for '{keyword}'</SliderTitle>
-              )}
-              <AnimatePresence onExitComplete={toggleLeavingTv} initial={false}>
-                <Row
-                  variants={rowVars}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  transition={{ type: "tween", duration: 1 }}
-                  key={indexTv}
-                >
-                  {tvSearch
-                    ?.slice(offset * indexTv, offset * indexTv + offset)
-                    .map((search) => (
-                      <Box
-                        layoutId={search.id + ""}
-                        key={search.id}
-                        bgphoto={
-                          search.backdrop_path
-                            ? makeImagePath(search.backdrop_path, "w500")
-                            : makeImagePath(search.poster_path, "w500")
-                        }
-                        whileHover="hover"
-                        initial="normal"
-                        variants={boxVars}
-                        transition={{ type: "tween" }}
-                        onClick={() => onBoxClicked(search.id)}
-                      >
-                        <Info variants={infoVars}>
-                          <h4>{search.name || search.title || keyword}</h4>
-                        </Info>
-                      </Box>
-                    ))}
-                </Row>
-              </AnimatePresence>
-            </Slider>
-            <AnimatePresence>
-              {bigSearchMatch ? (
-                <>
-                  <Overlay
-                    onClick={onOverlayClicked}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  ></Overlay>
-                  <Bigtv
-                    layoutId={bigSearchMatch?.params.searchId + ""}
-                    style={{ top: scrollY.get() + 100 }}
-                  >
-                    {clickedSearch && (
-                      <>
-                        {clickedSearch.backdrop_path ? (
-                          <BigCover
-                            style={{
-                              backgroundImage: `linear-gradient(to top, #181818, transparent), url(${makeImagePath(
-                                clickedSearch.backdrop_path,
-                                "w500"
-                              )})`,
-                            }}
-                          />
-                        ) : clickedSearch.poster_path ? (
-                          <BigCover
-                            style={{
-                              backgroundImage: `linear-gradient(to top, #181818, transparent), url(${makeImagePath(
-                                clickedSearch.poster_path,
-                                "w500"
-                              )})`,
-                            }}
-                          />
-                        ) : (
-                          <BigCover
-                            style={{
-                              backgroundImage: `linear-gradient(to top, #181818, transparent)
+                          }}
+                        />
+                      ) : clickedSearch.poster_path ? (
+                        <BigCover
+                          style={{
+                            backgroundImage: `linear-gradient(to top, #181818, transparent), url(${makeImagePath(
+                              clickedSearch.poster_path,
                               "w500"
                             )})`,
-                            }}
-                          >
-                            <NoImg>No Image on Server</NoImg>
-                          </BigCover>
-                        )}
-                        <BigTitle>
-                          {clickedSearch.name || clickedSearch.title || keyword}
-                        </BigTitle>
-                        <BigOverview>{clickedSearch.overview}</BigOverview>
-                      </>
-                    )}
-                  </Bigtv>
-                </>
-              ) : null}
-            </AnimatePresence>
-          </Sliders>
+                          }}
+                        />
+                      ) : (
+                        <BigCover
+                          style={{
+                            backgroundImage: `linear-gradient(to top, #181818, transparent)
+                              "w500"
+                            )})`,
+                          }}
+                        >
+                          <NoImg>No Image on Server</NoImg>
+                        </BigCover>
+                      )}
+                      <BigTitle>
+                        {clickedSearch.name || clickedSearch.title || keyword}
+                      </BigTitle>
+                      <BigOverview>{clickedSearch.overview}</BigOverview>
+                    </>
+                  )}
+                </Bigtv>
+              </>
+            ) : null}
+          </AnimatePresence>
         </>
       )}
 
