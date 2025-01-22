@@ -149,10 +149,10 @@ const Header = () => {
   };
   const navigate = useNavigate();
   const goMain = () => {
-    navigate("/react_master_graduate");
+    navigate("/");
   };
   const onValid = (data: IForm) => {
-    navigate(`/react_master_graduate/search?keyword=${data.keyword}`);
+    navigate(`/search?keyword=${data.keyword}`);
     window.location.reload();
   };
   const { register, handleSubmit } = useForm<IForm>();

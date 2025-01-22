@@ -263,10 +263,10 @@ const infoVars = {
 //main Fn
 const Tv = () => {
   const navigate = useNavigate();
-  const bigtvMatchNow = useMatch("react_master_graduate/tv/Now/:showId");
-  const bigtvMatchOn = useMatch("react_master_graduate/tv/On/:showId");
-  const bigtvMatchTop = useMatch("react_master_graduate/tv/Top/:showId");
-  const bigtvMatchPop = useMatch("react_master_graduate/tv/Pop/:showId");
+  const bigtvMatchNow = useMatch("tv/Now/:showId");
+  const bigtvMatchOn = useMatch("tv/On/:showId");
+  const bigtvMatchTop = useMatch("tv/Top/:showId");
+  const bigtvMatchPop = useMatch("tv/Pop/:showId");
   const { scrollY } = useScroll();
 
   //정보 가져오기
@@ -371,16 +371,16 @@ const Tv = () => {
 
   const offset = 6;
   const onBoxClickedNow = (showId: number) => {
-    navigate(`/react_master_graduate/tv/Now/${showId}`);
+    navigate(`/tv/Now/${showId}`);
   };
   const onBoxClickedOn = (showId: number) => {
-    navigate(`/react_master_graduate/tv/On/${showId}`);
+    navigate(`/tv/On/${showId}`);
   };
   const onBoxClickedTop = (showId: number) => {
-    navigate(`/react_master_graduate/tv/Top/${showId}`);
+    navigate(`/tv/Top/${showId}`);
   };
   const onBoxClickedPop = (showId: number) => {
-    navigate(`/react_master_graduate/tv/Pop/${showId}`);
+    navigate(`/tv/Pop/${showId}`);
   };
   const onOverlayClicked = () => {
     navigate(-1);
