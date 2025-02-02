@@ -11,7 +11,7 @@ import ReviewScreen from "./Screen/ReviewScreen";
 const router = createBrowserRouter(
   [
     {
-      path: "/",
+      path: "/react_master_graduate/",
       element: <App />,
       children: [
         {

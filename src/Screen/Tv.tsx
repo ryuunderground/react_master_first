@@ -371,16 +371,16 @@ const Tv = () => {
 
   const offset = 6;
   const onBoxClickedNow = (showId: number) => {
-    navigate(`/react_master_graduate/tv/Now/${showId}`);
+    navigate(`/tv/Now/${showId}`);
   };
   const onBoxClickedOn = (showId: number) => {
-    navigate(`/react_master_graduate/tv/On/${showId}`);
+    navigate(`/tv/On/${showId}`);
   };
   const onBoxClickedTop = (showId: number) => {
-    navigate(`/react_master_graduate/tv/Top/${showId}`);
+    navigate(`/tv/Top/${showId}`);
   };
   const onBoxClickedPop = (showId: number) => {
-    navigate(`/react_master_graduate/tv/Pop/${showId}`);
+    navigate(`/tv/Pop/${showId}`);
   };
   const onOverlayClicked = () => {
     navigate(-1);
