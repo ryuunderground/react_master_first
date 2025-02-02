@@ -235,10 +235,10 @@ const infoVars = {
 //main Fn
 const Home = () => {
   const navigate = useNavigate();
-  const bigMovieMatchNP = useMatch("react_master_graduate/moviesNP/:movieId");
-  const bigMovieMatchUP = useMatch("react_master_graduate/moviesUP/:movieId");
-  const bigMovieMatchTR = useMatch("react_master_graduate/moviesTR/:movieId");
-  const bigMovieMatchP = useMatch("react_master_graduate/moviesP/:movieId");
+  const bigMovieMatchNP = useMatch("/moviesNP/:movieId");
+  const bigMovieMatchUP = useMatch("/moviesUP/:movieId");
+  const bigMovieMatchTR = useMatch("/moviesTR/:movieId");
+  const bigMovieMatchP = useMatch("/moviesP/:movieId");
   const { scrollY } = useScroll();
   const { data: movieNowPlaying, isLoading: movieNowLoading } =
     useQuery<IGetMoviesResult>(["movies", "nowPlaying"], () =>
@@ -339,16 +339,16 @@ const Home = () => {
   };
   const offset = 6;
   const onBoxClickedNP = (movieId: number) => {
-    navigate(`/react_master_graduate/moviesNP/${movieId}`);
+    navigate(`/moviesNP/${movieId}`);
   };
   const onBoxClickedUP = (movieId: number) => {
-    navigate(`/react_master_graduate/moviesUP/${movieId}`);
+    navigate(`/moviesUP/${movieId}`);
   };
   const onBoxClickedTR = (movieId: number) => {
-    navigate(`/react_master_graduate/moviesTR/${movieId}`);
+    navigate(`/moviesTR/${movieId}`);
   };
   const onBoxClickedP = (movieId: number) => {
-    navigate(`/react_master_graduate/moviesP/${movieId}`);
+    navigate(`/moviesP/${movieId}`);
   };
 
   const onOverlayClicked = () => {
@@ -356,7 +356,7 @@ const Home = () => {
   };
 
   /*   const goToReview = (movieId: number) => {
-    navigate(`/react_master_graduate/moviereview/${movieId}`);
+    navigate(`/moviereview/${movieId}`);
   }; */
 
   const clickedMovieNP =

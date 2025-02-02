@@ -194,7 +194,7 @@ const Search = () => {
   const location = useLocation();
   const keyword = new URLSearchParams(location.search).get("keyword");
   const navigate = useNavigate();
-  const bigSearchMatch = useMatch("react_master_graduate/search/:searchId");
+  const bigSearchMatch = useMatch("/search/:searchId");
   const { scrollY } = useScroll();
   const { data: searchResult, isLoading: searching } =
     useQuery<IGetSearchResult>(["search", "search_result"], () =>
@@ -260,7 +260,7 @@ const Search = () => {
 
   const offset = 6;
   const onBoxClicked = (searchId: number) => {
-    navigate(`/react_master_graduate/search/${searchId}`);
+    navigate(`/search/${searchId}`);
   };
   const onOverlayClicked = () => {
     navigate(-1);
