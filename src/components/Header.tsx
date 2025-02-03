@@ -112,8 +112,8 @@ const logoVars = {
 };
 
 const Header = () => {
-  const homeMatch = useMatch("react_master_graduate/");
-  const tvMatch = useMatch("react_master_graduate/tv");
+  const homeMatch = useMatch("/");
+  const tvMatch = useMatch("/tv");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
@@ -149,10 +149,10 @@ const Header = () => {
   };
   const navigate = useNavigate();
   const goMain = () => {
-    navigate("/react_master_graduate");
+    navigate("/");
   };
   const onValid = (data: IForm) => {
-    navigate(`/react_master_graduate/search?keyword=${data.keyword}`);
+    navigate(`/search?keyword=${data.keyword}`);
     window.location.reload();
   };
   const { register, handleSubmit } = useForm<IForm>();

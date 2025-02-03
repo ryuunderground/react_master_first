@@ -150,6 +150,35 @@ const Overlay = styled(motion.div)`
   opacity: 0;
 `;
 
+const Back = styled.div`
+  width: 5vw;
+  height: 5vw;
+  background-color: transparent;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 16px;
+  &:hover {
+    transform: scale(1.2);
+  }
+  span {
+    pointer-events: none;
+    position: absolute;
+    color: black;
+    font-size: 64px;
+    z-index: 84;
+
+    &:last-child {
+      color: white;
+      font-weight: 600;
+      z-index: 83;
+    }
+  }
+`;
+
 //Variants
 const rowVars = {
   hidden: {
@@ -206,8 +235,7 @@ const Search = () => {
   const tvSearch = searchResult?.results.filter(
     (search) => search.media_type === "tv"
   );
-  console.log(movieSearch);
-  console.log(tvSearch);
+
   const [indexMovie, setIndexMovie] = useState(0);
   const [indexTv, setIndexTv] = useState(0);
   const [isLeavingMovie, setIsLeavingMovie] = useState(false);
@@ -263,6 +291,9 @@ const Search = () => {
     navigate(`/search/${searchId}`);
   };
   const onOverlayClicked = () => {
+    navigate(-1);
+  };
+  const goBack = () => {
     navigate(-1);
   };
 
@@ -348,7 +379,12 @@ const Search = () => {
                                 "w500"
                               )})`,
                             }}
-                          />
+                          >
+                            <Back onClick={goBack}>
+                              <span>X</span>
+                              <span>X</span>
+                            </Back>
+                          </BigCover>
                         ) : clickedSearch.poster_path ? (
                           <BigCover
                             style={{
@@ -357,7 +393,12 @@ const Search = () => {
                                 "w500"
                               )})`,
                             }}
-                          />
+                          >
+                            <Back onClick={goBack}>
+                              <span>X</span>
+                              <span>X</span>
+                            </Back>
+                          </BigCover>
                         ) : (
                           <BigCover
                             style={{
@@ -367,6 +408,10 @@ const Search = () => {
                             }}
                           >
                             <NoImg>No Image on Server</NoImg>
+                            <Back onClick={goBack}>
+                              <span>X</span>
+                              <span>X</span>
+                            </Back>
                           </BigCover>
                         )}
                         <BigTitle>
@@ -446,7 +491,12 @@ const Search = () => {
                                 "w500"
                               )})`,
                             }}
-                          />
+                          >
+                            <Back onClick={goBack}>
+                              <span>X</span>
+                              <span>X</span>
+                            </Back>
+                          </BigCover>
                         ) : clickedSearch.poster_path ? (
                           <BigCover
                             style={{
@@ -455,7 +505,12 @@ const Search = () => {
                                 "w500"
                               )})`,
                             }}
-                          />
+                          >
+                            <Back onClick={goBack}>
+                              <span>X</span>
+                              <span>X</span>
+                            </Back>
+                          </BigCover>
                         ) : (
                           <BigCover
                             style={{
@@ -465,6 +520,10 @@ const Search = () => {
                             }}
                           >
                             <NoImg>No Image on Server</NoImg>
+                            <Back onClick={goBack}>
+                              <span>X</span>
+                              <span>X</span>
+                            </Back>
                           </BigCover>
                         )}
                         <BigTitle>

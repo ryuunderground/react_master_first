@@ -165,8 +165,26 @@ const Back = styled.div`
   position: absolute;
   top: 0;
   right: 0;
-  font-size: 5vw;
-  color: ${(props) => props.theme.black.lighter};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 16px;
+  &:hover {
+    transform: scale(1.2);
+  }
+  span {
+    pointer-events: none;
+    position: absolute;
+    color: black;
+    font-size: 64px;
+    z-index: 84;
+
+    &:last-child {
+      color: white;
+      font-weight: 600;
+      z-index: 83;
+    }
+  }
 `;
 
 const Overlay = styled(motion.div)`
@@ -245,10 +263,10 @@ const infoVars = {
 //main Fn
 const Tv = () => {
   const navigate = useNavigate();
-  const bigtvMatchNow = useMatch("react_master_graduate/tv/Now/:showId");
-  const bigtvMatchOn = useMatch("react_master_graduate/tv/On/:showId");
-  const bigtvMatchTop = useMatch("react_master_graduate/tv/Top/:showId");
-  const bigtvMatchPop = useMatch("react_master_graduate/tv/Pop/:showId");
+  const bigtvMatchNow = useMatch("/tv/Now/:showId");
+  const bigtvMatchOn = useMatch("/tv/On/:showId");
+  const bigtvMatchTop = useMatch("/tv/Top/:showId");
+  const bigtvMatchPop = useMatch("/tv/Pop/:showId");
   const { scrollY } = useScroll();
 
   //정보 가져오기
@@ -353,22 +371,22 @@ const Tv = () => {
 
   const offset = 6;
   const onBoxClickedNow = (showId: number) => {
-    navigate(`/react_master_graduate/tv/Now/${showId}`);
+    navigate(`/tv/Now/${showId}`);
   };
   const onBoxClickedOn = (showId: number) => {
-    navigate(`/react_master_graduate/tv/On/${showId}`);
+    navigate(`/tv/On/${showId}`);
   };
   const onBoxClickedTop = (showId: number) => {
-    navigate(`/react_master_graduate/tv/Top/${showId}`);
+    navigate(`/tv/Top/${showId}`);
   };
   const onBoxClickedPop = (showId: number) => {
-    navigate(`/react_master_graduate/tv/Pop/${showId}`);
+    navigate(`/tv/Pop/${showId}`);
   };
   const onOverlayClicked = () => {
     navigate(-1);
   };
   const goBack = () => {
-    navigate("/react_master_graduate/tv");
+    navigate("/tv");
   };
   const clickedtvNow =
     bigtvMatchNow?.params.showId &&
@@ -472,7 +490,10 @@ const Tv = () => {
                           }}
                         >
                           {" "}
-                          <Back onClick={goBack}>x</Back>
+                          <Back onClick={goBack}>
+                            <span>X</span>
+                            <span>X</span>
+                          </Back>
                         </BigCover>
                         <BigTitle>{clickedtvNow.original_name}</BigTitle>
 
@@ -566,7 +587,10 @@ const Tv = () => {
                                 )})`,
                               }}
                             >
-                              <Back onClick={goBack}>x</Back>
+                              <Back onClick={goBack}>
+                                <span>X</span>
+                                <span>X</span>
+                              </Back>
                             </BigCover>
                             <BigTitle>{clickedtvOn.original_name}</BigTitle>
 
@@ -661,7 +685,10 @@ const Tv = () => {
                                 )})`,
                               }}
                             >
-                              <Back onClick={goBack}>x</Back>
+                              <Back onClick={goBack}>
+                                <span>X</span>
+                                <span>X</span>
+                              </Back>
                             </BigCover>
                             <BigTitle>{clickedtvTop.original_name}</BigTitle>
 
@@ -756,7 +783,10 @@ const Tv = () => {
                                 )})`,
                               }}
                             >
-                              <Back onClick={goBack}>x</Back>
+                              <Back onClick={goBack}>
+                                <span>X</span>
+                                <span>X</span>
+                              </Back>
                             </BigCover>
                             <BigTitle>{clickedtvPop.original_name}</BigTitle>
 
