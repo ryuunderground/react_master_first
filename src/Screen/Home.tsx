@@ -1,3 +1,7 @@
+{
+  /*This is what I've waiting for*/
+}
+
 import { useQuery } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { IGetMoviesResult, getMovies } from "../api";
