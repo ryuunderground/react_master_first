@@ -2,12 +2,11 @@ import { Outlet } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { ThemeProvider } from "styled-components";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { darkTheme } from "./theme";
-import { DragDropContext, DragUpdate, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import styled from "styled-components";
-import { IToDoState, toDoState } from "./components/atoms";
-import DraggableCard from "./components/DraggableCard";
+import { toDoState } from "./components/atoms";
 import Board from "./components/Board";
 import { Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
@@ -109,9 +108,12 @@ const Bin = styled.div<IBinProps>`
   background-color: white;
   font-size: 80px;
   position: relative;
+  flex-direction: column;
   span {
     display: flex;
     position: absolute;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
@@ -173,6 +175,7 @@ const App = () => {
     if (!destination) return;
     if (destination?.droppableId === "Bin") {
       console.log("this will be gone");
+      setCurrentDragDestination(destination?.droppableId || null);
       setToDos((allBoards) => {
         const sourceBoard = [...allBoards[source.droppableId]];
         sourceBoard.splice(source.index, 1);
@@ -214,21 +217,18 @@ const App = () => {
   };
   const save = () => {
     console.log("saved");
-
     saveKeys.forEach((saveKey) => {
       const saveValue = toDos[saveKey];
       sessionStorage.setItem(saveKey, JSON.stringify(saveValue));
     });
   };
-  const locator = (update: DragUpdate) => {
-    setCurrentDragDestination(update.destination?.droppableId || null);
-  };
+
   return (
     <>
       <ThemeProvider theme={darkTheme}>
         <GlobalStyles />
         <Outlet />
-        <DragDropContext onDragEnd={onDragEnd} onDragUpdate={locator}>
+        <DragDropContext onDragEnd={onDragEnd}>
           <Wrapper>
             <Save onClick={save}>💾</Save>
             <form onSubmit={handleSubmit(onValid)}>
