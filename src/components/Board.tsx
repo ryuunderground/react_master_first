@@ -9,6 +9,7 @@ import { useSetRecoilState } from "recoil";
 interface IBoardProps {
   toDos: IToDo[];
   boardId: string;
+  destination: string | null;
 }
 
 interface IForm {
@@ -83,7 +84,7 @@ const Delete = styled.button`
   }
 `;
 
-const Board = ({ toDos, boardId }: IBoardProps) => {
+const Board = ({ toDos, boardId, destination }: IBoardProps) => {
   const setToDos = useSetRecoilState(toDoState);
   const { register, setValue, handleSubmit } = useForm<IForm>();
   const onValid = ({ toDo }: IForm) => {
@@ -135,6 +136,7 @@ const Board = ({ toDos, boardId }: IBoardProps) => {
                   index={index}
                   toDoId={toDo.id}
                   toDoText={toDo.text}
+                  destination={destination}
                 />
               ))}
               {magic.placeholder}

@@ -4,14 +4,14 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { ThemeProvider } from "styled-components";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { darkTheme } from "./theme";
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, DragUpdate, DropResult } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { IToDoState, toDoState } from "./components/atoms";
 import DraggableCard from "./components/DraggableCard";
 import Board from "./components/Board";
 import { Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const GlobalStyles = createGlobalStyle`
 
@@ -108,6 +108,11 @@ const Bin = styled.div<IBinProps>`
   border: 3px solid #000;
   background-color: white;
   font-size: 80px;
+  position: relative;
+  span {
+    display: flex;
+    position: absolute;
+  }
 `;
 
 const Save = styled.button`
@@ -146,6 +151,10 @@ const App = () => {
     });
   }, []);
 
+  const [currentDragDestination, setCurrentDragDestination] = useState<
+    string | null
+  >(null);
+
   const { register, setValue, handleSubmit } = useForm<IForm>();
   const onValid = ({ newCat }: IForm) => {
     setToDos((allBoards) => {
@@ -158,6 +167,7 @@ const App = () => {
     setValue("newCat", "");
   };
   const onDragEnd = (info: DropResult) => {
+    setCurrentDragDestination(null); // Reset destination when drag ends
     console.log(info);
     const { destination, source } = info;
     if (!destination) return;
@@ -210,12 +220,15 @@ const App = () => {
       sessionStorage.setItem(saveKey, JSON.stringify(saveValue));
     });
   };
+  const locator = (update: DragUpdate) => {
+    setCurrentDragDestination(update.destination?.droppableId || null);
+  };
   return (
     <>
       <ThemeProvider theme={darkTheme}>
         <GlobalStyles />
         <Outlet />
-        <DragDropContext onDragEnd={onDragEnd}>
+        <DragDropContext onDragEnd={onDragEnd} onDragUpdate={locator}>
           <Wrapper>
             <Save onClick={save}>💾</Save>
             <form onSubmit={handleSubmit(onValid)}>
@@ -227,7 +240,12 @@ const App = () => {
             </form>
             <Boards>
               {Object.keys(toDos).map((boardId) => (
-                <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
+                <Board
+                  boardId={boardId}
+                  key={boardId}
+                  toDos={toDos[boardId]}
+                  destination={currentDragDestination}
+                />
               ))}
             </Boards>
             <Droppable droppableId="Bin">
